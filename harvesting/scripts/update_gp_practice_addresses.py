@@ -35,9 +35,7 @@ def update_gp_addresses():
             print 'Preparing data for datastore'
             fieldnames = csv.next()
             fields = [{"id": n, "type": "text"} for n in fieldnames]
-            records = []
-            for row in csv:
-                records.append(dict(zip(fieldnames, row)))
+            records = [dict(zip(fieldnames, row)) for row in csv]
 
             print 'Uploading to datastore'
             dev.action.datastore_create(
