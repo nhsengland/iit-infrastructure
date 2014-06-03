@@ -1,0 +1,6 @@
+ckanapi
+ffs
+requests
+dataconverters
+unicodecsv
+messytables
