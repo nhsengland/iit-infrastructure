@@ -1,0 +1,24 @@
+---
+# This playbook sets installs the CKAN application.
+- name: update apt-cache
+  sudo: true
+  apt: update_cache=yes
+
+- name: install packages for CKAN
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - nginx
+    - apache2
+    - libapache2-mod-wsgi
+    - libpq5
+
+- name: download CKAN package
+  get_url: 'url="http://packaging.ckan.org/{{ ckan_package_filename }}" dest=/tmp/{{ ckan_package_filename }}'
+
+- name: install CKAN package
+  sudo: true
+  apt: deb=/tmp/{{ ckan_package_filename }}
+  register: ckan_installed
+  notify:
+    - Restart Apache
+    - Restart Nginx
