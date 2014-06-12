@@ -1,0 +1,31 @@
+---
+# Sets up the datastore.
+
+- name: create DataStore database
+  sudo_user: postgres
+  postgresql_db: name={{ datastore_db }} owner={{ db_user }}
+
+- name: set DataStore database owner
+  sudo_user: postgres
+  postgresql_user: 'db={{ datastore_db }} name={{ db_user }} password={{ db_password }} priv=ALL'
+
+- name: create DataStore database user
+  sudo_user: postgres
+  postgresql_user: 'name={{ datastore_db_user }} password={{ datastore_db_password }}'
+
+- name: set DataStore database write address
+  ini_file: dest=/etc/ckan/default/production.ini
+            section=app:main
+            option=ckan.datastore.write_url
+            value=postgresql://{{ db_user }}:{{ db_password }}@{{ db_host }}/datastore_default
+            backup=yes
+
+- name: Set DataStore database server read address
+  ini_file: dest=/etc/ckan/default/production.ini
+            section=app:main
+            option=ckan.datastore.read_url
+            value=postgresql://{{ datastore_db_user }}:{{ datastore_db_password }}@{{ db_host }}/datastore_default
+            backup=yes
+
+- name: Set DataStore database permissions
+  command: ckan datastore set-permissions postgres

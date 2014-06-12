@@ -1,11 +1,9 @@
 ---
 # This playbook installs and (re)configures Postgres.
 - name: update apt-cache
-  sudo: true
   apt: update_cache=yes
 
 - name: install Postgres and psycopg2
-  sudo: true
   apt: pkg={{ item }} state=installed
   with_items:
     - postgresql
@@ -13,16 +11,13 @@
 
 - name: add ckan_default database user
   sudo_user: postgres
-  sudo: true
   postgresql_user: name={{ db_user }} password={{ db_password }} role_attr_flags=CREATEDB
 
 - name: create ckan_default database
   sudo_user: postgres
-  sudo: true
   postgresql_db: name={{ db_name }} encoding='UTF-8' owner={{ db_user }}
 
 - name: update CKAN database configuration
-  sudo: true
   ini_file: dest=/etc/ckan/default/production.ini
             section=app:main
             option=sqlalchemy.url
@@ -30,7 +25,6 @@
             backup=yes
 
 - name: initialise the database
-  sudo: true
   command: ckan db init
   notify:
     - Restart Apache
