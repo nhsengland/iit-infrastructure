@@ -15,11 +15,8 @@
   git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}}
        dest=/home/ubuntu/ckanext-nhsengland
 
-- name: link repos into virtualenv
-  command: ln -s /home/ubuntu/ckanext-nhsengland/ckanext /usr/lib/ckan/default/lib/python2.7/site-packages/ckanext
-
 - name: run setup.py for the plugin
-  command: /usr/lib/ckan/default/bin/python setup.py install chdir=/home/ubuntu/ckanext-nhsengland
+  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
 
 - name: set plugins in production settings
   ini_file: dest=/etc/ckan/default/production.ini

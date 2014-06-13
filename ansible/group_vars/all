@@ -12,5 +12,5 @@ datastore_db_user: datastore_default
 datastore_db_password: datastore_default
 git_user: nhsecodemonkey
 git_password: W0mb135!n7h3p455W0rd
-git_repos: bitbucket.org/ntoll/ckanext-nhsengland.git
+git_repos: bitbucket.org/nhsengland/ckanext-nhsengland.git
 git_protocol: https://
