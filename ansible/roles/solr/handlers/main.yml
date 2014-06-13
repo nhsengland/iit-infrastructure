@@ -1,0 +1,7 @@
+---
+# Handlers for Jetty / SOLR
+- name: Start Jetty
+  service: name=jetty state=started
+
+- name: Restart Jetty
+  service: name=jetty state=restarted

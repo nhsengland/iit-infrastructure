@@ -1,0 +1,21 @@
+---
+# Installs and configures the FileStore
+
+- name: Install acl related packages
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - acl
+
+- name: Ensure FileStore directory exists
+  file: path=/var/lib/ckan/default owner=www-data state=directory
+
+- name: Set FileStore directory path
+  ini_file: dest=/etc/ckan/default/production.ini
+            section=app:main
+            option=ckan.storage_path
+            value=/var/lib/ckan/default
+            backup=yes
+
+- name: Ensure Apache can write to FileStore directory
+  acl: name=/var/lib/ckan/default entity=www-data etype=user permissions=u+rwx
+  notify: Restart Apache

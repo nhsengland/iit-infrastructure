@@ -1,0 +1,36 @@
+---
+# This playbook installs the bespoke plugins required for the site and ensures
+# CKAN's configuration is correct.
+
+#
+# RIGHT NOW IT'S A BLOODY GREAT BIG HACK!
+#
+
+- name: install packages for repos
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+
+- name: clone git repository
+  git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}}
+       dest=/home/ubuntu/ckanext-nhsengland
+
+- name: run setup.py for the plugin
+  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
+
+- name: set plugins in production settings
+  ini_file: dest=/etc/ckan/default/production.ini
+            section=app:main
+            option=ckan.plugins
+            value="stats text_preview recline_preview nhsengland_skin datastore"
+            backup=yes
+
+- name: set logo in production settings
+  ini_file: dest=/etc/ckan/default/production.ini
+            section=app:main
+            option=ckan.site_logo
+            value=/images/nhsengland_logo.png
+            backup=yes
+  notify:
+    - Restart Apache
+    - Restart Nginx

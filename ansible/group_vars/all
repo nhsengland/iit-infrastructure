@@ -1,0 +1,16 @@
+---
+# Variables listed here are applicable to all host groups
+ckan_package_filename: 'python-ckan_2.2_amd64.deb'
+db_host: localhost
+db_name: ckan_default
+db_user: ckan_default
+db_password: ckan_default
+solr_host: 127.0.0.1
+solr_port: 8983
+datastore_db: datastore_default
+datastore_db_user: datastore_default
+datastore_db_password: datastore_default
+git_user: nhsecodemonkey
+git_password: W0mb135!n7h3p455W0rd
+git_repos: bitbucket.org/nhsengland/ckanext-nhsengland.git
+git_protocol: https://

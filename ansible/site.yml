@@ -1,0 +1,45 @@
+---
+# This playbook deploys/installs a complete CKAN isolated instance for
+# NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+
+- name: install CKAN
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - ckan
+
+- name: install and configure SOLR
+  sudo: yes
+  user: ubuntu
+  hosts: solr
+  roles:
+    - solr
+
+- name: install and configure Postgres
+  sudo: yes
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - db
+
+- name: install and configure DataStore
+  sudo: yes
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - datastore
+
+- name: install and configure FileStore
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - filestore
+
+- name: install and configure plugins
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - plugins

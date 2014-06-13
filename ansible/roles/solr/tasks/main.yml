@@ -1,0 +1,29 @@
+---
+# Installs and configures SOLR for use by CKAN.
+- name: update apt-cache
+  apt: update_cache=yes
+
+- name: install SOLR
+  apt: name=solr-jetty
+
+- name: update SOLR configuration - NO_START
+  lineinfile: 'dest=/etc/default/jetty regexp=^NO_START line="NO_START=0"'
+
+- name: update SOLR configuration - JETTY_HOST
+  lineinfile: 'dest=/etc/default/jetty regexp=^JETTY_HOST line="JETTY_HOST={{ solr_host }}"'
+
+- name: update SOLR configuration - JETTY_PORT
+  lineinfile: 'dest=/etc/default/jetty regexp=^JETTY_PORT line="JETTY_PORT={{ solr_port }}"'
+
+- name: update SOLR configuration - JAVA_HOME
+  lineinfile: 'dest=/etc/default/jetty regexp=JAVA_HOME line="JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64/"'
+
+- name: backup SOLR schema.xml
+  command: mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
+
+- name: update SOLR schema.xml
+  file: path=/etc/solr/conf/schema.xml src=/usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml state=link
+  notify: Restart Jetty
+
+- name: Set CKAN Solr server address
+  lineinfile: 'dest=/etc/ckan/default/production.ini regexp=solr_url line=solr_url=http://{{ solr_host }}:{{ solr_port }}/solr'
