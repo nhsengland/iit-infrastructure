@@ -11,6 +11,14 @@
     - apache2
     - libapache2-mod-wsgi
     - libpq5
+    - emacs
+    - htop
+    - iotop
+    - tree
+    - ack-grep
+    - vim
+    - zip
+    - screen
 
 - name: download CKAN package
   get_url: 'url="http://packaging.ckan.org/{{ ckan_package_filename }}" dest=/tmp/{{ ckan_package_filename }}'
