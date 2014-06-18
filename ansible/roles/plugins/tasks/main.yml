@@ -18,19 +18,6 @@
 - name: run setup.py for the plugin
   command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
 
-- name: set plugins in production settings
-  ini_file: dest=/etc/ckan/default/production.ini
-            section=app:main
-            option=ckan.plugins
-            value="stats text_preview recline_preview nhsengland_skin datastore"
-            backup=yes
-
-- name: set logo in production settings
-  ini_file: dest=/etc/ckan/default/production.ini
-            section=app:main
-            option=ckan.site_logo
-            value=/images/nhsengland_logo.png
-            backup=yes
   notify:
     - Restart Apache
     - Restart Nginx

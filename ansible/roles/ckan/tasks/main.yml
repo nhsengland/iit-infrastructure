@@ -27,6 +27,9 @@
   sudo: true
   apt: deb=/tmp/{{ ckan_package_filename }}
   register: ckan_installed
+
+- name: configure our CKAN instance
+  sudo: true
+  template: src=config/production.ini dest=/etc/ckan/default/production.ini
   notify:
     - Restart Apache
-    - Restart Nginx
