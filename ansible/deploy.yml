@@ -9,9 +9,6 @@
       notify:
         - Restart Apache
 
-    - name: run setup.py for the plugin
-      command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
-
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
