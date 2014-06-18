@@ -2,10 +2,6 @@
 # This playbook installs the bespoke plugins required for the site and ensures
 # CKAN's configuration is correct.
 
-#
-# RIGHT NOW IT'S A BLOODY GREAT BIG HACK!
-#
-
 - name: install packages for repos
   apt: pkg={{ item }} state=installed
   with_items:
@@ -17,7 +13,3 @@
 
 - name: run setup.py for the plugin
   command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
-
-  notify:
-    - Restart Apache
-    - Restart Nginx

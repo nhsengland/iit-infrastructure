@@ -24,6 +24,3 @@
 - name: update SOLR schema.xml
   file: path=/etc/solr/conf/schema.xml src=/usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml state=link
   notify: Restart Jetty
-
-- name: Set CKAN Solr server address
-  lineinfile: 'dest=/etc/ckan/default/production.ini regexp=solr_url line=solr_url=http://{{ solr_host }}:{{ solr_port }}/solr'

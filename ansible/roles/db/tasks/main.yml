@@ -16,16 +16,3 @@
 - name: create ckan_default database
   sudo_user: postgres
   postgresql_db: name={{ db_name }} encoding='UTF-8' owner={{ db_user }}
-
-- name: update CKAN database configuration
-  ini_file: dest=/etc/ckan/default/production.ini
-            section=app:main
-            option=sqlalchemy.url
-            value=postgresql://{{ db_user }}:{{ db_password }}@{{ db_host }}/ckan_default
-            backup=yes
-
-- name: initialise the database
-  command: ckan db init
-  notify:
-    - Restart Apache
-    - Restart Nginx
