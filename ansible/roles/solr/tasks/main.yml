@@ -4,7 +4,10 @@
   apt: update_cache=yes
 
 - name: install SOLR
-  apt: name=solr-jetty
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - solr-jetty
+    - openjdk-6-jdk
 
 - name: update SOLR configuration - NO_START
   lineinfile: 'dest=/etc/default/jetty regexp=^NO_START line="NO_START=0"'
