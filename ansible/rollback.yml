@@ -1,0 +1,33 @@
+---
+# This playbook allows us to rollback the bespoke plugins required for the site
+#
+# Example commandline usage:
+#
+#     ansible-playbook -i hosts rollback.yml --extra-vars="tag=Alpha"
+#     ansible-playbook -i hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999"
+#
+
+- name: rollback
+  hosts: webservers
+  sudo: yes
+  user: ubuntu
+  gather_facts: false
+
+  tasks:
+    - name: Rollback to commit
+      git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}}
+           dest=/home/ubuntu/ckanext-nhsengland version={{ commit }}
+      when: commit|default(None) != None
+      notify:
+        - Restart Apache
+
+    - name: Rollback to tag
+      git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}}
+           dest=/home/ubuntu/ckanext-nhsengland version={{ tag }}
+      when: tag|default(None) != None
+      notify:
+        - Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service: name=apache2 state=restarted
