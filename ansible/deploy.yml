@@ -1,0 +1,14 @@
+- name: update Plugin
+  hosts: webservers
+  sudo: yes
+  user: ubuntu
+  gather_facts: false
+  tasks:
+    - name: Update Git repo
+      git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}} dest=/home/ubuntu/ckanext-nhsengland update=yes
+      notify:
+        - Restart Apache
+
+  handlers:
+    - name: Restart Apache
+      service: name=apache2 state=restarted

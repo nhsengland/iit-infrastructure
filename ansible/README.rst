@@ -24,9 +24,16 @@ Make sure you create/update the hosts file to something like the following::
 
 Please ensure you have the correct keys (pem) for the instances you hope to manage.
 
-Usage
+Deploying a new site
 -----
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
     ansible-playbook -i hosts site.yml
+
+Deploying changes to Ckanext NHSEngland
+----------------------------------------
+
+Simply run the following command in this directory and "it should just work" (tm)::
+
+    ansible-playbook -i hosts deploy.yml

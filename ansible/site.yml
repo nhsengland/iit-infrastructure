@@ -37,9 +37,31 @@
   roles:
     - filestore
 
-- name: install and configure plugins
+- name: install plugins
   sudo: yes
   user: ubuntu
   hosts: webservers
   roles:
     - plugins
+
+- name: configure ckan
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  tasks:
+      - name: configure our CKAN instance
+        template: src=config/production.ini dest=/etc/ckan/default/production.ini
+
+      - name: initialise the database
+        command: ckan db init
+
+
+      - name: Set DataStore database permissions
+        command: ckan datastore set-permissions postgres
+
+
+      - name: restart Apache
+        service: name=apache2 state=restarted
+
+      - name: restart Nginx
+        service: name=nginx state=restarted

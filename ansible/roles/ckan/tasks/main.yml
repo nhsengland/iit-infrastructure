@@ -27,6 +27,3 @@
   sudo: true
   apt: deb=/tmp/{{ ckan_package_filename }}
   register: ckan_installed
-  notify:
-    - Restart Apache
-    - Restart Nginx
