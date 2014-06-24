@@ -37,3 +37,19 @@ Deploying changes to Ckanext NHSEngland
 Simply run the following command in this directory and "it should just work" (tm)::
 
     ansible-playbook -i hosts deploy.yml
+
+
+Rolling back changes to Ckanext NHSEngland
+------------------------------------------
+
+Rollbacks consist of checking out a previous version of the git repo and then restarting
+Apache.
+
+For your convenience, the handy rollback.yml playbook has been created to do just that !
+
+You can roll back either to tags (by name), or to specific commits (by hash).
+
+Example commandline usage:
+
+     ansible-playbook -i hosts rollback.yml --extra-vars="tag=Alpha"
+     ansible-playbook -i hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999"
