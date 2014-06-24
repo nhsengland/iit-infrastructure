@@ -61,7 +61,7 @@ For the purposes of disaster recovery we need to regularly backup our database
 and have a well understood mechanism for restoring the data. This is what
 the backup.yml playbook is for.
 
-The playbook will deploy all the required scripts, credentials and
+The deployment playbook will deploy all the required scripts, credentials and
 dependencies needed for backup and restore to occur. The basic modus operandi
 is as follows for backup:
 
@@ -80,6 +80,10 @@ The restore process is very simple:
 * As the ubuntu user run the restore script: ``restore.sh KEYNAME`` where KEYNAME is the name of the key you looked up earlier (e.f. ``restore.sh ip-172-31-14-177``)
 * This script will grab the backup from S3, unzip it, stop Apache, restart Postgres (so pg_restore is not blocked by existing connections), use CKAN's blessed paster commands to clean then restore the main database (see http://docs.ckan.org/en/latest/maintaining/paster.html#dumping-and-loading-databases-to-from-a-file), use pg_restore to restore the datastore database (this may produce some errors that are safe to ignore), copy the filestore files back into the correct location and kick off a reindex by SOLR.
 
-To run this playbook use the following command::
+In order to ACTUALLY SET-UP SCHEDULED BACKUPS FOR AN INSTANCE you need to run
+this playbook use the following command::
 
     ansible-playbook -i hosts backup.yml
+
+This playbook simply uses the CRON daemon to schedule all the backup scripts
+you first deployed when the new instance was created.
