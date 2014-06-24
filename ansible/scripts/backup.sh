@@ -20,8 +20,7 @@ rm *.tgz
 mkdir -p "$backup_dir"
 
 # Use pg_dump on the databases.
-sudo su - postgres -c "pg_dump ckan_default" > "$backup_dir/ckan_default.sql"
-sudo su - postgres -c "pg_dump -Fc ckan_default" > "$backup_dir/ckan_default.dump"
+/usr/lib/ckan/default/bin/paster --plugin=ckan db dump -c /etc/ckan/default/production.ini "$backup_dir/ckan_default.sql"
 sudo su - postgres -c "pg_dump datastore_default" > "$backup_dir/datastore_default.sql"
 sudo su - postgres -c "pg_dump -Fc datastore_default" > "$backup_dir/datastore_default.dump"
 

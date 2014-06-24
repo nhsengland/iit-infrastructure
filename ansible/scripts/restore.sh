@@ -22,11 +22,12 @@ tar xfvz "backup-$1.tgz"
 cd ..
 
 # Restore the databases.
-sudo su - postgres -c "pg_restore -d ckan_default -c" < "restored/ckan_default.dump"
+sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db clean -c /etc/ckan/default/production.ini
+sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db load -c /etc/ckan/default/production.ini restored/ckan_default.sql
 sudo su - postgres -c "pg_restore -d datastore_default -c" < "restored/datastore_default.dump"
 
 # Copy the filestore directory into the backup directory.
-sudo cp -r default/* /var/lib/ckan/default
+cp -r restored/default/* /var/lib/ckan/default
 
 # Reindex SOLR:
 /usr/lib/ckan/default/bin/paster --plugin=ckan user list -c /etc/ckan/default/production.ini search-index rebuild

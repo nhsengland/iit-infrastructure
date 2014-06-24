@@ -24,8 +24,6 @@ def pushy_galore(bucket, key_name, filename):
     bucket = connection.get_bucket(bucket)
     key = Key(bucket)
     key.key = key_name
-    # TODO: CHECK THIS TO SET ACLs on new key
-    key.set_acl('authenticated-read')
     key.set_contents_from_filename(filename)
 
 
@@ -49,6 +47,7 @@ if __name__ == '__main__':
         if os.path.exists(filename):
             try:
                 pushy_galore(BUCKET, HOSTNAME, filename)
+                print "Uploaded backups to S3: %s %s" % (BUCKET, HOSTNAME)
             except Exception, ex:
                 sys.stderr.write(str(ex))
                 sys.exit(1)
