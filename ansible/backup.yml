@@ -50,4 +50,5 @@
     - name: copy Python S3 downloader
       copy: src=scripts/download.py dest=/home/ubuntu/download.py mode=0644 owner=ubuntu
 
-    #- name: configure CRON
+    - name: configure CRON
+      cron: name="run backup" hour="1" user="ubuntu" job="/home/ubuntu/backup.sh"
