@@ -19,6 +19,7 @@
     - vim
     - zip
     - screen
+    - python-boto
 
 - name: download CKAN package
   get_url: 'url="http://packaging.ckan.org/{{ ckan_package_filename }}" dest=/tmp/{{ ckan_package_filename }}'

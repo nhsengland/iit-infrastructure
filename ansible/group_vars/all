@@ -14,3 +14,6 @@ git_user: nhsecodemonkey
 git_password: W0mb135!n7h3p455W0rd
 git_repos: bitbucket.org/nhsengland/ckanext-nhsengland.git
 git_protocol: https://
+AWS_ACCESS_KEY_ID: AKIAIMTXXTCHCQ62BRNA
+AWS_SECRET_ACCESS_KEY: 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
+S3_BUCKET: nhsebackups
