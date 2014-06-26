@@ -8,4 +8,4 @@
   gather_facts: false
   tasks:
     - name: configure CRON
-      cron: name="run backup" hour="1" user="ubuntu" job="/home/ubuntu/backup.sh"
+      cron: name="run backup" hour="1" minute="1" user="ubuntu" job="/home/ubuntu/backup.sh"
