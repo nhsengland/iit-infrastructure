@@ -1,0 +1,11 @@
+---
+# This playbook sets up everything needed for dailybackups to occur.
+
+- name: Start Backups
+  hosts: webservers
+  sudo: yes
+  user: ubuntu
+  gather_facts: false
+  tasks:
+    - name: configure CRON
+      cron: name="run backup" hour="1" minute="1" user="ubuntu" job="/home/ubuntu/backup.sh"
