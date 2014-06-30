@@ -17,7 +17,7 @@ git_protocol: https://
 AWS_ACCESS_KEY_ID: AKIAIMTXXTCHCQ62BRNA
 AWS_SECRET_ACCESS_KEY: 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
 S3_BUCKET: nhsebackups
-EMAIL_FROM: nicholas.tollervey@nhs.net
+EMAIL_FROM: support@nhse.zendesk.com
 EMAIL_SERVER: email-smtp.eu-west-1.amazonaws.com:25
 EMAIL_STARTTLS: True
 EMAIL_USERNAME: AKIAJFTMOGJXX6JCEFKA
