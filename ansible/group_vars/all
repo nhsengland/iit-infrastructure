@@ -1,3 +1,4 @@
+# -*- Mode: yaml -*-
 ---
 # Variables listed here are applicable to all host groups
 ckan_package_filename: 'python-ckan_2.2_amd64.deb'
@@ -17,3 +18,10 @@ git_protocol: https://
 AWS_ACCESS_KEY_ID: AKIAIMTXXTCHCQ62BRNA
 AWS_SECRET_ACCESS_KEY: 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
 S3_BUCKET: nhsebackups
+EMAIL_FROM: support@nhse.zendesk.com
+EMAIL_SERVER: email-smtp.eu-west-1.amazonaws.com:25
+EMAIL_STARTTLS: True
+EMAIL_USERNAME: AKIAJFTMOGJXX6JCEFKA
+EMAIL_PASSWORD: AjaZisvnmzHJzmzzM5/eKdPUymkRv6PzgEANHKIX0GNm
+EMAIL_SINCE: 00:05:00
+ADMIN_API_KEY: REPLACE_THIS
