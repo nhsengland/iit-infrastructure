@@ -29,7 +29,9 @@ Deploying a new site
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts site.yml
+    ansible-playbook -i hosts site.yml --ask-vault-pass
+
+You will need to obtain the appropriate password through the usual channels.
 
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------
