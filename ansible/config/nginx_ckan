@@ -13,7 +13,7 @@ server {
     ssl on;
     ssl_certificate      /etc/ssl/data.england.nhs.uk.crt;
     ssl_certificate_key  /etc/ssl/data.england.nhs.uk.key;
-    ssl_protocols        SSLv3 TLSv1 TLSv1.1 TLSv1.2;
+    ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
     keepalive_timeout    60;
