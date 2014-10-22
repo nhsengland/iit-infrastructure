@@ -33,12 +33,17 @@ Simply run the following command in this directory and "it should just work" (tm
 
 You will need to obtain the appropriate password through the usual channels.
 
+If you need to deploy the website with SSL enabled (only do this if you're
+deploying to data.england.nhs.uk) then remember to run::
+
+    ansible-playbook -i hosts ssl.yml --ask-vault-pass
+
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts deploy.yml
+    ansible-playbook -i hosts deploy.yml --ask-vault-pass
 
 
 Rolling back changes to Ckanext NHSEngland
