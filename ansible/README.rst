@@ -29,21 +29,21 @@ Deploying a new site
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts site.yml --ask-vault-pass
+    ansible-playbook -i hosts site.yml --vault-pasword-file ~/.vault.txt
 
 You will need to obtain the appropriate password through the usual channels.
 
 If you need to deploy the website with SSL enabled (only do this if you're
 deploying to data.england.nhs.uk) then remember to run::
 
-    ansible-playbook -i hosts ssl.yml --ask-vault-pass
+    ansible-playbook -i hosts ssl.yml --vault-password-file ~/.vault.txt
 
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts deploy.yml --ask-vault-pass
+    ansible-playbook -i hosts deploy.yml --vault-password-file ~/.vault.txt
 
 
 Rolling back changes to Ckanext NHSEngland
@@ -90,7 +90,7 @@ The restore process is very simple:
 In order to ACTUALLY SET-UP SCHEDULED BACKUPS FOR AN INSTANCE you need to run
 this playbook use the following command::
 
-    ansible-playbook -i hosts backup.yml
+    ansible-playbook -i hosts backup.yml --vault-password-file ~/.vault.txt
 
 This playbook simply uses the CRON daemon to schedule all the backup scripts
 you first deployed when the new instance was created.
