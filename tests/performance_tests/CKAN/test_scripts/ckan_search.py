@@ -47,3 +47,10 @@ class Transaction(object):
                       
         # think-time
         time.sleep(2)  
+        
+if __name__ == '__main__':
+    trans = Transaction()
+    trans.run()
+    
+    for timer in trans.custom_timers:
+        print '%s: %.5f secs' % (timer, trans.custom_timers[timer])
