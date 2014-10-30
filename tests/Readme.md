@@ -85,6 +85,7 @@ Global Options
 
 The following settings/options are available in the [global] config section:
 
+```
 run_time: duration of test (seconds) [required]
 rampup: duration of user rampup (seconds) [required]
 results_ts_interval: time series interval for results analysis (seconds) [required]
@@ -93,10 +94,13 @@ console_logging: turn on/off logging to stdout [optional, default = off]
 xml_report: turn on/off xml/jtl report [optional, default = off]
 results_database: database connection string [optional]
 post_run_script: hook to call a script at test completion [optional]
+```
 
 User Groups
 
-The following settings/options are available in each [user_group-*] config section:
+The following settings/options are available in each `[user_group-*]` config section:
 
+```
 threads: number of threads/virtual users
 script: virtual user test script to run
+```
