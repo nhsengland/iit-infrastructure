@@ -1,6 +1,3 @@
-import matplotlib
-import httplib
-import time
 import mechanize
 
 
