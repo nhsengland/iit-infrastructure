@@ -23,12 +23,12 @@ Peformance Tests
 
 http://testutils.org/multi-mechanize
 
-```
+
 Each test project contains the following:
-config.cfg: configuration file. set your test options here.
-test_scripts/: directory for virtual user scripts. add your test scripts here.
-results/: directory for results storage. a timestamped directory is created for each test run, containing the results report.
-```
+
+* config.cfg: configuration file. set your test options here.
+* test_scripts/: directory for virtual user scripts. add your test scripts here.
+* results/: directory for results storage. a timestamped directory is created for each test run, containing the results report.
 
 Install matplotlib to generate graphs as part of results.html
 
