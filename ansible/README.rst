@@ -29,7 +29,7 @@ Deploying a new site
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts site.yml --vault-pasword-file ~/.vault.txt
+    ansible-playbook -i hosts site.yml --vault-password-file ~/.vault.txt
 
 You will need to obtain the appropriate password through the usual channels.
 
