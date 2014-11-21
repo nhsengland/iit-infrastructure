@@ -1,0 +1,26 @@
+---
+# This playbook installs the bespoke plugins required for the site and ensures
+# CKAN's configuration is correct.
+
+- name: install packages for repos
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+    - libxml2
+    - libxml2-dev
+    - libxslt1.1
+    - libxslt1-dev
+    - openssl
+    - libssl-dev
+    - swig
+    - python-dev
+
+- name: clone git repository
+  git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos_adfs }}
+       dest=/home/ubuntu/ckanext-adfs
+
+- name: run setup.py for the plugin
+  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-adfs
+
+- name: download the FederationMetadata.xml file
+  get_url: url={{ ADFS_METADATA_URL }} dest={{ ADFS_FEDERATION_METADATA_PATH }}
