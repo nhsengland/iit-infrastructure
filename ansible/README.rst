@@ -12,54 +12,54 @@ You need to have Ansible installed. I simply created a virtualenv and pip instal
 Make sure you create/update the hosts file to something like the following::
 
     [webservers]
-    ec2-11-111-11-11.us-west-2.compute.amazonaws.com
+    data.england.nhs.uk
 
     [dbservers]
-    ec2-11-111-11-11.us-west-2.compute.amazonaws.com
+    data.england.nhs.uk
 
     [solr]
-    ec2-11-111-11-11.us-west-2.compute.amazonaws.com
+    data.england.nhs.uk
 
 (Replace with the appropriate hostname[s] - look in hosts.example for hints)
 
 Please ensure you have the correct keys (pem) for the instances you hope to manage.
 
-Deploying a new site
---------------------
+Deploying
+---------
 
-Simply run the following command in this directory and "it should just work" (tm)::
+Make sure you have the Ansible vault password in the .vault.txt file (available via the usual channels).
 
-    ansible-playbook -i hosts site.yml --ask-vault-pass
+Simply run the following command in this directory and "it should just work" (tm) to install a test instance::
 
-You will need to obtain the appropriate password through the usual channels.
+    ansible-playbook -i hosts deploy_test.yml --vault-password-file ~/.vault.txt
 
-If you need to deploy the website with SSL enabled (only do this if you're
-deploying to data.england.nhs.uk) then remember to run::
+This brings up an empty "basic" CKAN instance with NHSEngland branding.
 
-    ansible-playbook -i hosts ssl.yml --ask-vault-pass
+If you want to deploy a "full" production type instance with all the bells and whistles, you need to type::
+
+    ansible-playbook -i hosts deploy_prod.yml --vault-password-file ~/.vault.txt
 
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts deploy.yml --ask-vault-pass
+    ansible-playbook -i hosts update.yml --vault-password-file ~/.vault.txt
 
 
 Rolling back changes to Ckanext NHSEngland
 ------------------------------------------
 
-Rollbacks consist of checking out a previous version of the git repo and then restarting
-Apache.
+Rollbacks consist of checking out a previous version of the git repo and then restarting Apache.
 
-For your convenience, the handy rollback.yml playbook has been created to do just that !
+For your convenience, the handy rollback.yml playbook has been created to do just that!
 
 You can roll back either to tags (by name), or to specific commits (by hash).
 
-Example commandline usage:
+Example commandline usage::
 
-     ansible-playbook -i hosts rollback.yml --extra-vars="tag=Alpha"
-     ansible-playbook -i hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999"
+     ansible-playbook -i hosts rollback.yml --extra-vars="tag=Alpha" --vault-password-file ~/.vault.txt
+     ansible-playbook -i hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999" --vault-password-file ~/.vault.txt
 
 Database backup and restore
 ---------------------------
@@ -68,9 +68,7 @@ For the purposes of disaster recovery we need to regularly backup our database
 and have a well understood mechanism for restoring the data. This is what
 the backup.yml playbook is for.
 
-The deployment playbook will deploy all the required scripts, credentials and
-dependencies needed for backup and restore to occur. The basic modus operandi
-is as follows for backup:
+Both the test and production playbooks will deploy all the required scripts, credentials and dependencies needed for backup and restore to occur. The prod playbook schedules the daily backup. The basic modus operandi is as follows for backup:
 
 * A backup.sh script is scheduled to be run by the CRON daemon.
 * This script takes a snapshot of both Postgres databases, copies the filestore, tgzips it all up and dumps it into the nhsebackups bucket on S3.
@@ -84,13 +82,5 @@ The restore process is very simple:
 
 * Find the backup you want to use within S3 and note the key name (it'll be something like ip-172-31-14-177)
 * SSH into the new box that you want to restore the data to.
-* As the ubuntu user run the restore script: ``restore.sh KEYNAME`` where KEYNAME is the name of the key you looked up earlier (e.f. ``restore.sh ip-172-31-14-177``)
+* As the ubuntu user run the restore script: ``restore.sh KEYNAME`` where KEYNAME is the name of the key you looked up earlier (e.g. ``restore.sh ip-172-31-14-177``)
 * This script will grab the backup from S3, unzip it, stop Apache, restart Postgres (so pg_restore is not blocked by existing connections), use CKAN's blessed paster commands to clean then restore the main database (see http://docs.ckan.org/en/latest/maintaining/paster.html#dumping-and-loading-databases-to-from-a-file), use pg_restore to restore the datastore database (this may produce some errors that are safe to ignore), copy the filestore files back into the correct location and kick off a reindex by SOLR.
-
-In order to ACTUALLY SET-UP SCHEDULED BACKUPS FOR AN INSTANCE you need to run
-this playbook use the following command::
-
-    ansible-playbook -i hosts backup.yml
-
-This playbook simply uses the CRON daemon to schedule all the backup scripts
-you first deployed when the new instance was created.

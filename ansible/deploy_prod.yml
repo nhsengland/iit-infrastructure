@@ -1,0 +1,102 @@
+---
+# This playbook deploys/installs a complete CKAN isolated instance for
+# NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+
+- name: install CKAN
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - ckan
+
+- name: install and configure SOLR
+  sudo: yes
+  user: ubuntu
+  hosts: solr
+  roles:
+    - solr
+
+- name: install and configure Postgres
+  sudo: yes
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - db
+
+- name: install and configure DataStore
+  sudo: yes
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - datastore
+
+- name: install and configure FileStore
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - filestore
+
+- name: install plugin
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - plugin
+
+- name: install adfs
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - adfs
+
+- name: configure email
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - email
+
+- name: configure S3 filestore
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - s3
+
+- name: configure SSL
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - ssl
+
+- name: configure ckan
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  tasks:
+      - name: configure our CKAN instance
+        template: src=config/prod_settings.ini dest=/etc/ckan/default/production.ini
+
+      - name: initialise the database
+        command: ckan db init
+
+
+      - name: Set DataStore database permissions
+        command: ckan datastore set-permissions postgres
+
+
+      - name: restart Apache
+        service: name=apache2 state=restarted
+
+      - name: restart Nginx
+        service: name=nginx state=restarted
+
+- name: configure backup scripts
+  sudo: yes
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - backup

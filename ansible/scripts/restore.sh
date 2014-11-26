@@ -32,6 +32,9 @@ sudo su - postgres -c "pg_restore -d datastore_default -c" < "restored/datastore
 
 # Copy the filestore directory into the backup directory.
 sudo cp -r restored/default/* /var/lib/ckan/default
+# Ensure that the restored directories are read/writable by Apache
+sudo chown -R www-data /var/lib/ckan/default
+sudo chgrp -R www-data /var/lib/ckan/default
 
 # Restart Apache
 sudo service apache2 start

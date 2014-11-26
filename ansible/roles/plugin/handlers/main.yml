@@ -1,0 +1,8 @@
+---
+# Handlers for web related services. Such handlers are called by other "plays"
+
+- name: Restart Apache
+  service: name=apache2 state=restarted
+
+- name: Restart Nginx
+  service: name=nginx state=restarted

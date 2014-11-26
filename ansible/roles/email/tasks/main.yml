@@ -1,0 +1,7 @@
+---
+# This playbook configures email sending in a production environment.
+- name: copy push script
+  template: src=scripts/push_email.sh dest=/home/ubuntu/push_email.sh
+
+- name: configure CRON
+  cron: name="push email" minute="0,5,10,15,20,25,30,35,40,45,50,55" user="ubuntu" job="/home/ubuntu/push_email.sh"

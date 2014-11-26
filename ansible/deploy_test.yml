@@ -37,12 +37,12 @@
   roles:
     - filestore
 
-- name: install plugins
+- name: install plugin
   sudo: yes
   user: ubuntu
   hosts: webservers
   roles:
-    - plugins
+    - plugin
 
 - name: configure ckan
   sudo: yes
@@ -50,7 +50,7 @@
   hosts: webservers
   tasks:
       - name: configure our CKAN instance
-        template: src=config/production.ini dest=/etc/ckan/default/production.ini
+        template: src=config/test_settings.ini dest=/etc/ckan/default/production.ini
 
       - name: initialise the database
         command: ckan db init
