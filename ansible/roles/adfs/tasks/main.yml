@@ -16,7 +16,7 @@
     - python-dev
 
 - name: clone git repository
-  git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos_adfs }}
+  git: repo={{ git_protocol }}{{ git_repos_adfs }}
        dest=/home/ubuntu/ckanext-adfs
 
 - name: run setup.py for the plugin

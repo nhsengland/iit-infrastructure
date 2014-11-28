@@ -16,14 +16,14 @@
     - python-dev
 
 - name: clone git repository
-  git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos_nhse }}
+  git: repo={{ git_protocol }}{{ git_repos_nhse }}
        dest=/home/ubuntu/ckanext-nhsengland
 
 - name: run setup.py for the plugin
   command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
 
 - name: clone git repository
-  git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos_adfs }}
+  git: repo={{ git_protocol }}{{ git_repos_adfs }}
        dest=/home/ubuntu/ckanext-adfs
 
 - name: run setup.py for the plugin

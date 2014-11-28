@@ -1,13 +1,19 @@
-- name: update Plugin
+- name: update Plugins
   hosts: webservers
   sudo: yes
   user: ubuntu
   gather_facts: false
   tasks:
-    - name: Update Git repo
-      git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}} dest=/home/ubuntu/ckanext-nhsengland update=yes
+    - name: Update Git repo for ckanext-nhsengland
+      git: repo={{ git_protocol }}{{ git_repos_nhse}} dest=/home/ubuntu/ckanext-nhsengland update=yes
       notify:
         - Restart Apache
+
+    - name: Update Git repo for ckanext-adfs
+      git: repo={{ git_protocol }}{{ git_repos_adfs}} dest=/home/ubuntu/ckanext-adfs update=yes
+      notify:
+        - Restart Apache
+
 
   handlers:
     - name: Restart Apache
