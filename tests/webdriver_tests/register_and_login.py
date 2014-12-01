@@ -3,7 +3,7 @@ __author__ = 'Dom Barnett'
 
 import random
 import string
-import pkg
+from lib import get_or_create_driver
 
 
 class Register_and_login():
@@ -17,7 +17,7 @@ class Register_and_login():
         username = first_name + '_' + surname
         password = "password01"
 
-        self.browser = pkg.get_or_create_driver()
+        self.browser = get_or_create_driver()
 
         # Navigate to Registration page
         self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[2]/a").click()
