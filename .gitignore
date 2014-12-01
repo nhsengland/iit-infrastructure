@@ -1,3 +1,5 @@
 *.swp
 ansible/hosts
 *~
+*.pyc
+tests/performance_tests/*/results

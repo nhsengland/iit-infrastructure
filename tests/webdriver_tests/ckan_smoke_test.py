@@ -1,17 +1,16 @@
 __author__ = 'Dom Barnett'
 
 import unittest
-import pkg
+from lib import get_or_create_driver
 from register_user import RegisterUser
 from register_and_login import Register_and_login
 
 
 class SmokeTests(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
-        cls.browser = pkg.get_or_create_driver()
-        cls.browser.get('http://ec2-54-171-89-128.eu-west-1.compute.amazonaws.com/')
+        cls.browser = get_or_create_driver()
+        cls.browser.get('http://ec2-54-77-144-171.eu-west-1.compute.amazonaws.com/')
         cls.browser.maximize_window()
 
     @classmethod
@@ -54,26 +53,30 @@ class SmokeTests(unittest.TestCase):
         browser.find_element_by_xpath("/html/body/div[3]/div[3]/div/div/div[2]/div/div/ul/li[1]/a").click()
 
         # Retain dataset title for manual search input
-        search_title = browser.find_element_by_xpath("/html/body/div[3]/div/div/div/section[1]/div/ul/li[1]/div/h3/a")\
+        dataset_title = browser.find_element_by_xpath("/html/body/div[3]/div/div/div/section[1]/div/ul/li[1]/div/h3/a")\
             .text
 
-        # Use search bar to search for exact title
+        # Split title to retain first 3 words in order to prevent searching for ellipsis
+        dataset_title_split = dataset_title.split(" ")
+        dataset_search = dataset_title_split[0] + ' ' + dataset_title_split[1] + ' ' + dataset_title_split[2]
+
+        # Use search bar to search for string
         browser.find_element_by_class_name("logo").click()
-        browser.find_element_by_class_name('search').send_keys('"' + search_title + '"')
+        browser.find_element_by_class_name('search').send_keys('"' + dataset_search + '"')
         browser.find_element_by_class_name("icon-search").click()
         self.assertIn('Datasets - CKAN', self.browser.title)
         browser.find_element_by_xpath("/html/body/div[3]/div/div/div/section[1]/div/ul/li/div/h3/a").click()
-        self.assertIn(search_title, self.browser.title)
+        self.assertTrue(self.browser.title.__contains__(dataset_search))
 
     def test_register_user(self):
 
         new_user = Register_and_login()
         new_user.register_and_login()
 
-        #Logout user
+        # Logout user
         self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[4]/a").click()
-        #self.assertTrue("/html/body/header[2]/div/nav/ul[2]/li[1]/a/span", new_user.register_and_login().
-                                #first_name + ' ' + new_user.register_and_login().surname)
+        # self.assertTrue("/html/body/header[2]/div/nav/ul[2]/li[1]/a/span", new_user.register_and_login().
+        #first_name + ' ' + new_user.register_and_login().surname)
 
     def test_logged_in_search(self):
 
@@ -101,7 +104,7 @@ class SmokeTests(unittest.TestCase):
         # Click on dataset
         self.browser.find_element_by_xpath("/html/body/div[3]/div/div/div/section[1]/div/ul/li[1]/div/h3/a").click()
 
-        #Logout user
+        # Logout user
         self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[4]/a").click()
 
     def test_dataset_download(self):
@@ -114,18 +117,32 @@ class SmokeTests(unittest.TestCase):
 
         # navigate to Dataset page and click on a dataset
         self.browser.find_element_by_link_text("Datasets").click()
-        self.browser.find_element_by_link_text(".xlsx").click()
+
+        # select first dataset
+        self.browser.find_element_by_xpath("/html/body/div[3]/div/div/div/section[1]/div/ul/li[1]/div/h3/a").click()
+
+        # Retrieve file format
+        file_format = self.browser.find_element_by_xpath("/html/body/div[3]/div/div/div/article/div/section[1]/ul/li"
+                                                         "[1]/a/span").get_attribute("data-format")
 
         # Click on explore dropdown and select "More information"
         self.browser.find_element_by_class_name("icon-share-alt").click()
         self.browser.find_element_by_class_name("icon-info-sign").click()
 
-        # Click Go to Resource
-        self.browser.find_element_by_class_name("icon-external-link").click()
+        # If file format is pdf, file will open in current tab
+        if file_format == u'pdf':
+            self.browser.find_element_by_class_name("icon-external-link").click()
+            self.assertIn("pdf", self.browser.current_url)
+            #navigate back to CKAN and logout
+            self.browser.back()
+            self.browser.find_element_by_class_name("logo").click()
+            self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[4]/a/i").click()
 
-        #Logout user
-        self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[4]/a").click()
+        else:
+            self.browser.find_element_by_class_name("icon-external-link").click()
+            self.browser.find_element_by_class_name("logo").click()
+            self.browser.find_element_by_xpath("/html/body/header[2]/div/nav/ul[2]/li[4]/a/i").click()
+
 
 if __name__ == '__main__':
     unittest.main()
-

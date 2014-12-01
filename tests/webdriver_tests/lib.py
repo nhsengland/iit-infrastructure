@@ -1,7 +1,4 @@
-__author__ = 'Dom Barnett'
-
 from selenium import webdriver
-
 DRIVER = None
 
 def get_or_create_driver():
