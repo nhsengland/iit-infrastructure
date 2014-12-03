@@ -1,10 +1,17 @@
+IIT Infrastructure
+==================
+
 Infrastructure, scripts, deployment, other for the NHSE IIT project
 
-## Deployment
+Deployment
+----------
 
 Ansible is your friend. See ./ansible .
 
-## Localization && Internationalization
+(We're assuming you're deploying to the recommended Ubuntu 12.04 release on AWS as the ubuntu user.)
+
+Localization && Internationalization
+------------------------------------
 
 Unlike the OED [1], NHS England's style guidelines suggest that iz(e|a) is an incorrect verb ending for English.
 
@@ -16,6 +23,6 @@ We then change the CKAN internationalization directory setting to be our NHS Eng
 
 In order to make this documentation comply with the NHS England style guide, please run the following command:
 
-    perl -p -i -e 's/iz(?=a|e)/is/g' ./README
+    perl -p -i -e 's/iz(?=a|e)/is/g' ./README.rst
 
 [1] http://www.oxforddictionaries.com/words/ize-ise-or-yse
