@@ -4,7 +4,13 @@ Testing NHS England
 Install / Setup
 ---------------
 
-To install dependencies run the following command:
+Install system deps: 
+
+```
+sudo apt-get install python-dev libfreetype6-dev libpng-dev
+```
+
+To install dependencies run the following command (Preferably in a virtualenv):
 
 ```
    pip install -r requirements.txt
@@ -45,6 +51,19 @@ a timestamped results directory is created for each test run, containing the res
 
 Configuration
 -------------
+
+Because reasons, Multimechanize doesn't expose the config to the "Transaction" AFAICT.
+Due to this you have to edit many files to e.g. set the CKAN base URL. 
+
+Sad faces.
+
+As a workaround until something more sensible comes up, you can set it as an environment variable "CKAN".
+
+e.g. 
+
+```
+    $ CKAN=data.gov.uk multimech-run CKAN
+```
 
 Minimal Configuration
 
