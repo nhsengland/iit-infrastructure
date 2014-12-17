@@ -7,7 +7,7 @@ Install / Setup
 Install system deps: 
 
 ```
-sudo apt-get install python-dev libfreetype6-dev libpng-dev
+sudo apt-get install python-dev libfreetype6-dev libpng-dev g++
 ```
 
 To install dependencies run the following command (Preferably in a virtualenv):
