@@ -1,5 +1,9 @@
+import os
 import time
+
 import mechanize
+
+CKAN = os.environ.get('CKAN', 'http://data.england.nhs.uk/')
 
 
 class Transaction(object):
@@ -17,7 +21,7 @@ class Transaction(object):
         # start the timer
         start_timer = time.time()
         # submit the request
-        br.open('http://ec2-54-77-144-171.eu-west-1.compute.amazonaws.com/')
+        br.open(CKAN)
                 
         # stop the timer
         latency = time.time() - start_timer
