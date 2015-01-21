@@ -24,6 +24,9 @@
 - name: backup SOLR schema.xml
   command: mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
 
+- name: copy solrconfig.xml
+  copy: src=config/solrconfig.xml dest=/etc/solr/conf/solrconfig.xml mode=0644 owner=root
+
 - name: update SOLR schema.xml
   file: path=/etc/solr/conf/schema.xml src=/usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml state=link
   notify: Restart Jetty
