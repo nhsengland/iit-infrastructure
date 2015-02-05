@@ -28,6 +28,10 @@
 - name: Tell dc where to find ckan
   template: src=config/dc.ini dest=/home/ubuntu/.dc.ini
 
+- command: bash -c "bin/crontool | crontab"
+  args:
+    chdir: /home/ubuntu/publishomatic/
+
 # TODO: Setup
 #
 # 1. Logging
