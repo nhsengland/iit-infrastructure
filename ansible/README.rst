@@ -20,6 +20,9 @@ Make sure you create/update the hosts file to something like the following::
     [solr]
     data.england.nhs.uk
 
+    [publishomatic]
+    data.endlang.nhs.uk
+
 (Replace with the appropriate hostname[s] - look in hosts.example for hints)
 
 Please ensure you have the correct keys (pem) for the instances you hope to manage.
@@ -38,6 +41,10 @@ This brings up an empty "basic" CKAN instance with NHSEngland branding.
 If you want to deploy a "full" production type instance with all the bells and whistles, you need to type::
 
     ansible-playbook -i hosts deploy_prod.yml --vault-password-file ~/.vault.txt
+
+If you just want to deploy publish-o-matic then you need to run
+
+    ansible-playbook -i hosts deploy_publishomatic.yml --vault-password-file ~/.vault.txt
 
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------

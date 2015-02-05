@@ -1,0 +1,31 @@
+---
+# This playbook installs publishomatic
+
+- name: install packages for repos
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+    - libxml2
+    - libxml2-dev
+    - libxslt1.1
+    - libxslt1-dev
+    - openssl
+    - libssl-dev
+    - python-dev
+
+
+- name: Install required Python packages.
+  easy_install: name={{ item }}
+  with_items:
+    - pip
+    - virtualenv
+
+- pip: name='git+{{ git_protocol }}{{ git_repos_publishomatic }}#egg=publishomatic' virtualenv=/home/ubuntu/publishomatic
+
+
+# TODO: Setup
+#
+# 1. Logging
+# 2. Cron jobs
+# 3. Notifications of failures.
+#
