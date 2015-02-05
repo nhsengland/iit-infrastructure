@@ -22,6 +22,11 @@
 
 - pip: name='git+{{ git_protocol }}{{ git_repos_publishomatic }}#egg=publishomatic' virtualenv=/home/ubuntu/publishomatic
 
+- name: Create our config file for scraping
+  template: src=config/publishomatic.config.ini dest=/home/ubuntu/publishomatic/config.ini
+
+- name: Tell dc where to find ckan
+  template: src=config/dc.ini dest=/home/ubuntu/.dc.ini
 
 # TODO: Setup
 #
