@@ -3,6 +3,7 @@
 
 - name: install packages for repos
   apt: pkg={{ item }} state=installed
+  sudo: yes
   with_items:
     - git
     - libxml2
@@ -16,6 +17,7 @@
 
 - name: Install required Python packages.
   easy_install: name={{ item }}
+  sudo: yes
   with_items:
     - pip
     - virtualenv
@@ -28,13 +30,16 @@
 - name: Tell dc where to find ckan
   template: src=config/dc.ini dest=/home/ubuntu/.dc.ini
 
-- command: bash -c "bin/crontool | crontab"
+- name: Tell dmswitch where to send results
+  template: src=config/dms.ini dest=/home/ubuntu/dms.ini
+
+- shell: whoami && bin/crontool | crontab
+  sudo_user: ubuntu
   args:
     chdir: /home/ubuntu/publishomatic/
 
 # TODO: Setup
 #
 # 1. Logging
-# 2. Cron jobs
 # 3. Notifications of failures.
 #
