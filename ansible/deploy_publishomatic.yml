@@ -1,6 +1,5 @@
 ---
-# This playbook deploys/installs a complete CKAN isolated instance for
-# NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+# This playbook deploys/installs a publish-o-matic on its own server
 
 - name: install publishomatic
   user: ubuntu
