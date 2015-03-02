@@ -1,5 +1,8 @@
 ---
 # This playbook installs publishomatic
+- name: update apt-cache
+  sudo: true
+  apt: update_cache=yes
 
 - name: install packages for repos
   apt: pkg={{ item }} state=installed
@@ -13,6 +16,8 @@
     - openssl
     - libssl-dev
     - python-dev
+    - python-pip
+    - python-virtualenv
 
 
 - name: Install required Python packages.
@@ -41,5 +46,4 @@
 # TODO: Setup
 #
 # 1. Logging
-# 3. Notifications of failures.
 #

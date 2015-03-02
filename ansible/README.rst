@@ -7,7 +7,10 @@ various sysop-y type "stuff".
 Setup
 -----
 
-You need to have Ansible installed. I simply created a virtualenv and pip installed ansible. Full docs here: http://docs.ansible.com/index.html
+You need to have Ansible installed. Make sure it is a recent (>1.6) version or you will encounter
+errors running the deb module
+
+I simply created a virtualenv and pip installed ansible. Full docs here: http://docs.ansible.com/index.html
 
 Make sure you create/update the hosts file to something like the following::
 

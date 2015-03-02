@@ -12,6 +12,7 @@
     - libapache2-mod-wsgi
     - libpq5
     - emacs
+    - git
     - htop
     - iotop
     - tree
