@@ -2,6 +2,10 @@
 #
 # Let's make ourselves a datapusher that isn't embarrassing.
 #
+- name: Kill the OKFN Datapusher
+  file: path=/usr/lib/ckan/datapusher/src/datapusher
+        state=absent
+
 - name: Install backported Datapusher
   git: repo=https://github.com/nhsengland/datapusher
        dest=/usr/lib/ckan/datapusher/src/datapusher
