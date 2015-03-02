@@ -30,6 +30,13 @@
   roles:
     - datastore
 
+- name: install and configure DataPusher
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - datapusher
+
 - name: install and configure FileStore
   sudo: yes
   user: ubuntu
