@@ -1,6 +1,9 @@
 
 0.  Install Ansible, and clone this repository.
 0.1 Obtain the relevant .pem and vault password files
+0.1.1 Make sure that the relevant .pem file has appropriate permissions
+      chmod 700 HebeKey.pem
+      
 0.2 Configure Ansible to use the .pem file from 0.1 by making a file ansible.cfg    
 
     [ssh_connection]
