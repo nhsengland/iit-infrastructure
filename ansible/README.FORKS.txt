@@ -22,7 +22,7 @@
 
 3. From this directory, run the command: 
 
-   ansible-playbook -i hosts hebe.yml --vault-password-file vault.txt
+   ansible-playbook -i hosts forks.yml --vault-password-file vault.txt
 
 4. Repeat steps 1-3 as often as needed.
 
