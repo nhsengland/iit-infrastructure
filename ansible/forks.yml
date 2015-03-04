@@ -1,0 +1,33 @@
+---
+#
+# Playbook to deploy to HEBE Test server.
+#
+- name: Deploy HEBE changes
+  vars: 
+    # PLEASE EDIT THIS BRANCH NAME AS APPROPRIATE.
+    # BRANCHES ARE AWESOME.
+    branch: master
+  hosts: webservers
+  sudo: yes
+  user: ubuntu
+  gather_facts: false
+  tasks:
+    - name: Remove Legacy CKAN Extension
+      file: path=/home/ubuntu/ckanext-nhsengland
+            state=absent
+
+    - name: Deploy New Board Report!
+      git: repo=https://github.com/davidmiller/ckanext-nhsengland 
+           dest=/home/ubuntu/ckanext-nhsengland 
+           update=yes
+           version={{ branch }}
+      notify:
+        - Restart Apache
+        
+    - name: run setup.py for the plugin
+      command: /usr/lib/ckan/default/bin/python setup.py develop
+               chdir=/home/ubuntu/ckanext-nhsengland
+
+  handlers:
+    - name: Restart Apache
+      service: name=apache2 state=restarted
