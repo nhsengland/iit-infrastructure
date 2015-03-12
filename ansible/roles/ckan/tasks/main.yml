@@ -21,6 +21,8 @@
     - zip
     - screen
     - python-boto
+    - libmemcached-dev
+    - memcached
 
 - name: download CKAN package
   get_url: 'url="http://packaging.ckan.org/build/{{ ckan_package_filename }}" dest=/tmp/{{ ckan_package_filename }}'
