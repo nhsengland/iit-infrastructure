@@ -17,13 +17,13 @@
             state=absent
 
     - name: Deploy New Board Report!
-      git: repo=https://github.com/davidmiller/ckanext-nhsengland 
-           dest=/home/ubuntu/ckanext-nhsengland 
+      git: repo=https://github.com/ntoll/ckanext-nhsengland
+           dest=/home/ubuntu/ckanext-nhsengland
            update=yes
            version={{ branch }}
       notify:
         - Restart Apache
-        
+
     - name: run setup.py for the plugin
       command: /usr/lib/ckan/default/bin/python setup.py develop
                chdir=/home/ubuntu/ckanext-nhsengland
