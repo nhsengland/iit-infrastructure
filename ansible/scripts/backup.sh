@@ -41,4 +41,4 @@ fi
 
 
 # Push any new data-source assets to S3
-sudo /usr/lib/ckan/default/bin/paster --plugin=ckanext-s3archive s3archive archive -c /etc/ckan/default/production.ini
+#sudo /usr/lib/ckan/default/bin/paster --plugin=ckanext-s3archive s3archive archive -c /etc/ckan/default/production.ini
