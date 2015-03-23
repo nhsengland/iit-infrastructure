@@ -21,6 +21,10 @@
     - zip
     - screen
     - python-boto
+    - python-pip
+    - python-virtualenv
+    - libmemcached-dev
+    - memcached
 
 - name: download CKAN package
   get_url: 'url="http://packaging.ckan.org/build/{{ ckan_package_filename }}" dest=/tmp/{{ ckan_package_filename }}'
@@ -29,3 +33,7 @@
   sudo: true
   apt: deb=/tmp/{{ ckan_package_filename }}
   register: ckan_installed
+
+- name: install pylibmc
+  sudo: true
+  pip: name=pylibmc virtualenv=/usr/lib/ckan/default
