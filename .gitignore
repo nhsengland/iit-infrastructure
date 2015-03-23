@@ -3,6 +3,6 @@ ansible/hosts
 *~
 *.pyc
 tests/performance_tests/*/results
-*.log
 *.pem
 .vault.txt
+*.log
