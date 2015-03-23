@@ -35,6 +35,10 @@ tar cfz $backup_target .
 # Upload to S3
 cd $USER_HOME
 python upload.py $backup_target
+if [ $? -eq 0 ] then
+  rm $backup_target
+fi
+
 
 # Push any new data-source assets to S3
 sudo /usr/lib/ckan/default/bin/paster --plugin=ckanext-s3archive s3archive archive -c /etc/ckan/default/production.ini
