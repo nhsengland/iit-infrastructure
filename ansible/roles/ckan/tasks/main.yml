@@ -21,6 +21,8 @@
     - zip
     - screen
     - python-boto
+    - python-pip
+    - python-virtualenv
     - libmemcached-dev
     - memcached
 
@@ -31,3 +33,7 @@
   sudo: true
   apt: deb=/tmp/{{ ckan_package_filename }}
   register: ckan_installed
+
+- name: install pylibmc
+  sudo: true
+  pip: name=pylibmc virtualenv=/usr/lib/ckan/default
