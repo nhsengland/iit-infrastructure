@@ -65,13 +65,6 @@
   roles:
     - email
 
-- name: configure S3 filestore
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - s3
-
 - name: configure SSL
   sudo: yes
   user: ubuntu

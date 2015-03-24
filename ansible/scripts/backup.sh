@@ -24,8 +24,7 @@ mkdir -p "$backup_dir"
 sudo su - postgres -c "pg_dump -Fc datastore_default" > "$backup_dir/datastore_default.dump"
 
 # Copy the filestore directory into the backup directory. This will contain any
-# newly uploaded data-source assets (it's just an extra source of safety in
-# case the S3 push at the end fails).
+# newly uploaded data-source assets.
 sudo cp -r /var/lib/ckan/default "$backup_dir/default"
 
 # Create the tgz
