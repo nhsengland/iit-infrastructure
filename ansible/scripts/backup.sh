@@ -24,7 +24,8 @@ mkdir -p "$backup_dir"
 sudo su - postgres -c "pg_dump -Fc datastore_default" > "$backup_dir/datastore_default.dump"
 
 # Copy the filestore directory into the backup directory. This will contain any
-# newly uploaded data-source assets.
+# newly uploaded data-source assets (it's just an extra source of safety in
+# case the S3 push at the end fails).
 sudo cp -r /var/lib/ckan/default "$backup_dir/default"
 
 # Create the tgz
@@ -37,3 +38,7 @@ python upload.py $backup_target
 if [ $? -eq 0 ] then
   rm $backup_target
 fi
+
+
+# Push any new data-source assets to S3
+sudo /usr/lib/ckan/default/bin/paster --plugin=ckanext-s3archive s3archive archive -c /etc/ckan/default/production.ini
