@@ -45,9 +45,24 @@ If you want to deploy a "full" production type instance with all the bells and w
 
     ansible-playbook -i hosts deploy_prod.yml --vault-password-file ~/.vault.txt
 
-If you just want to deploy publish-o-matic then you need to run
+If you just want to deploy publish-o-matic then you need to run::
 
     ansible-playbook -i hosts deploy_publishomatic.yml --vault-password-file ~/.vault.txt
+
+Configuring publishomatic
+-------------------------
+
+For PoM to work correctly, it needs some settings in the .dc.ini file that it generates from ./config/dc.ini
+In particular, it uses the following values from the group_vars/all file::
+
+    {{ staging_url }} - The CKAN URL
+    {{ staging_apikey }} - The CKAN API Key
+    {{ AWS_SECRET_ACCESS_KEY }} and  {{ AWS_ACCESS_KEY_ID }}
+
+To populate the config/dms.ini file it uses::
+
+    {{publishomatic_notify_to}} - The recipient address for the nightly email.
+
 
 Deploying changes to Ckanext NHSEngland
 ---------------------------------------
