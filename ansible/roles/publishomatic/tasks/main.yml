@@ -19,6 +19,15 @@
     - python-pip
     - python-virtualenv
 
+# Create logging folder and lograte entry
+- name: Creates logging directory
+  file: path=/var/log/publishomatic state=directory
+  sudo: yes
+
+# Creates logrotate file from config ...
+- name: Create our config file for scraping
+  template: src=config/publishomatic.logrotate.conf dest=/etc/logrotate.d/publishomatic
+  sudo: yes
 
 - name: Install required Python packages.
   easy_install: name={{ item }}
