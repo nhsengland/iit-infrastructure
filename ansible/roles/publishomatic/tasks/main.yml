@@ -21,7 +21,7 @@
 
 # Create logging folder and lograte entry
 - name: Creates logging directory
-  file: path=/var/log/publishomatic state=directory
+  file: path=/var/log/publishomatic state=directory owner=ubuntu
   sudo: yes
 
 # Creates logrotate file from config ...
