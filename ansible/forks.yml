@@ -3,7 +3,7 @@
 # Playbook to deploy to HEBE Test server.
 #
 - name: Deploy HEBE changes
-  vars: 
+  vars:
     # PLEASE EDIT THIS BRANCH NAME AS APPROPRIATE.
     # BRANCHES ARE AWESOME.
     branch: master
@@ -16,8 +16,8 @@
       file: path=/home/ubuntu/ckanext-nhsengland
             state=absent
 
-    - name: Deploy New Board Report!
-      git: repo=https://github.com/ntoll/ckanext-nhsengland
+    - name: Deploy NHS England!
+      git: repo=https://github.com/nhsengland/ckanext-nhsengland
            dest=/home/ubuntu/ckanext-nhsengland
            update=yes
            version={{ branch }}

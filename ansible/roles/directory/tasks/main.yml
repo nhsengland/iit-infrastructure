@@ -1,0 +1,30 @@
+---
+# This playbook installs the data directory
+
+- name: install packages for repos
+  sudo: yes
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - git
+    - rubygems
+
+- name: Install Jekyll
+  gem: name=jekyll version=1.5.0 state=present user_install=yes
+
+- name: Install Json
+  gem: name=json state=present user_install=yes
+
+- name: Install Kramdown
+  gem: name=kramdown state=present user_install=yes
+
+- name: clone git repository
+  git: repo={{ git_protocol }}github.com/nhsengland/datadirectory
+       dest=/home/ubuntu/datadirectory
+
+- name: generate the directory
+  command: /home/ubuntu/.gem/ruby/1.8/bin/jekyll build
+           chdir=/home/ubuntu/datadirectory
+
+- name: copy apache2 config
+  sudo: yes
+  copy: src=config/apache2_ckan_default dest=/etc/apache2/sites-available/ckan_default.conf mode=0644 owner=root
