@@ -20,6 +20,7 @@
 - name: clone git repository
   git: repo={{ git_protocol }}github.com/nhsengland/datadirectory
        dest=/home/ubuntu/datadirectory
+       version=gh-pages
 
 - name: generate the directory
   command: /home/ubuntu/.gem/ruby/1.8/bin/jekyll build
@@ -28,3 +29,7 @@
 - name: copy apache2 config
   sudo: yes
   copy: src=config/apache2_ckan_default dest=/etc/apache2/sites-available/ckan_default.conf mode=0644 owner=root
+
+- name: restart Apache
+  sudo: yes
+  service: name=apache2 state=restarted
