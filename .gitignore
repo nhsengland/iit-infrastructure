@@ -4,3 +4,5 @@ ansible/hosts
 *.pyc
 tests/performance_tests/*/results
 *.log
+*.pem
+ansible.cfg

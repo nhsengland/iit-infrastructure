@@ -4,7 +4,7 @@ WSGISocketPrefix /var/run/wsgi
     ServerName data.england.nhs.uk
     ServerAlias www.data.england.nhs.uk
 
-    Alias "/directory" "/home/ubuntu/datadirectory/_site"
+    Alias "/datadirectory" "/home/ubuntu/datadirectory/_site"
     Alias "/2016" "/home/ubuntu/datadirectory/_site/2016"
 
     WSGIScriptAlias / /etc/ckan/default/apache.wsgi

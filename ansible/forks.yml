@@ -1,12 +1,12 @@
 ---
 #
-# Playbook to deploy to HEBE Test server.
+# Playbook to deploy WIP to Test server.
 #
-- name: Deploy HEBE changes
+- name: Deploy WIP changes
   vars:
     # PLEASE EDIT THIS BRANCH NAME AS APPROPRIATE.
     # BRANCHES ARE AWESOME.
-    branch: master
+    branch: datadirectory
   hosts: webservers
   sudo: yes
   user: ubuntu
