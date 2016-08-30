@@ -4,11 +4,17 @@
 - name: create DataStore database
   sudo_user: postgres
   postgresql_db: name={{ datastore_db }} owner={{ db_user }}
+  vars:
+    ansible_ssh_pipelining: true
 
 - name: set DataStore database owner
   sudo_user: postgres
   postgresql_user: 'db={{ datastore_db }} name={{ db_user }} password={{ db_password }} priv=ALL'
+  vars:
+    ansible_ssh_pipelining: true
 
 - name: create DataStore database user
   sudo_user: postgres
   postgresql_user: 'name={{ datastore_db_user }} password={{ datastore_db_password }}'
+  vars:
+    ansible_ssh_pipelining: true
