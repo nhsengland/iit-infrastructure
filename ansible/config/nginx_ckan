@@ -11,8 +11,8 @@ server {
     listen 443 ssl;
     client_max_body_size 100M;
     ssl on;
-    ssl_certificate      /etc/ssl/data.england.nhs.uk.crt;
-    ssl_certificate_key  /etc/ssl/data.england.nhs.uk.key;
+    ssl_certificate      /etc/letsencrypt/live/datacatalogue.openhealthcare.org.uk/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/datacatalogue.openhealthcare.org.uk/privkey.pem;
     ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;

@@ -1,122 +1,129 @@
----
-# This playbook deploys/installs a complete CKAN isolated instance for
-# NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+# ---
+# # This playbook deploys/installs a complete CKAN isolated instance for
+# # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+#
+# - name: install CKAN
+#   sudo: yes
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - ckan
+#
+# - name: install and configure SOLR
+#   sudo: yes
+#   user: ubuntu
+#   hosts: solr
+#   roles:
+#     - solr
+#
+# - name: install and configure Postgres
+#   sudo: yes
+#   user: ubuntu
+#   hosts: dbservers
+#   roles:
+#     - db
+#
+# - name: install and configure DataStore
+#   sudo: yes
+#   user: ubuntu
+#   hosts: dbservers
+#   roles:
+#     - datastore
+#
+# - name: install and configure DataPusher
+#   sudo: yes
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - datapusher
+#
+# - name: install and configure FileStore
+#   sudo: yes
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - filestore
 
-- name: install CKAN
+- name: install and configure letsencrypt
   sudo: yes
   user: ubuntu
   hosts: webservers
   roles:
-    - ckan
-
-- name: install and configure SOLR
-  sudo: yes
-  user: ubuntu
-  hosts: solr
-  roles:
-    - solr
-
-- name: install and configure Postgres
-  sudo: yes
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - db
-
-- name: install and configure DataStore
-  sudo: yes
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - datastore
-
-- name: install and configure DataPusher
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - datapusher
-
-- name: install and configure FileStore
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - filestore
-
-- name: install plugin
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - plugin
-
-- name: configure ckan
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  tasks:
-      - name: configure our CKAN instance
-        template: src=config/test_settings.ini dest=/etc/ckan/default/production.ini
-
-      - name: initialise the database
-        command: ckan db init
-
-
-      - name: Set DataStore database permissions
-        command: ckan datastore set-permissions postgres
-
-
-      - name: restart Apache
-        service: name=apache2 state=restarted
-
-      - name: restart Nginx
-        service: name=nginx state=restarted
-
-- name: configure backup scripts
-  sudo: yes
-  user: ubuntu
-  hosts: dbservers
-  tasks:
-    - name: install packages for backup
-      apt: pkg={{ item }} state=installed
-      with_items:
-        - python-boto
-
-    - name: create BOTO configuration
-      file: path=/home/ubuntu/.boto
-            state=touch
-
-    - name: set AWS access key
-      ini_file: dest=/home/ubuntu/.boto
-                section=Credentials
-                option=aws_access_key_id
-                value={{ AWS_ACCESS_KEY_ID }}
-
-    - name: set AWS secret Key
-      ini_file: dest=/home/ubuntu/.boto
-                section=Credentials
-                option=aws_secret_access_key
-                value={{ AWS_SECRET_ACCESS_KEY }}
-
-    - name: create UPLOAD configuration
-      file: path=/home/ubuntu/.s3.ini
-            state=touch
-
-    - name: set S3 bucket name
-      ini_file: dest=/home/ubuntu/.s3.ini
-                section=Credentials
-                option=bucket
-                value={{ S3_BUCKET }}
-
-    - name: copy backup script
-      copy: src=scripts/backup.sh dest=/home/ubuntu/backup.sh mode=0744 owner=ubuntu
-
-    - name: copy Python S3 uploader
-      copy: src=scripts/upload.py dest=/home/ubuntu/upload.py mode=0644 owner=ubuntu
-
-    - name: copy restore script
-      copy: src=scripts/restore.sh dest=/home/ubuntu/restore.sh mode=0744 owner=ubuntu
-
-    - name: copy Python S3 downloader
-      copy: src=scripts/download.py dest=/home/ubuntu/download.py mode=0644 owner=ubuntu
+    - letsencrypt
+#
+# - name: install plugin
+#   sudo: yes
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - plugin
+#
+# - name: configure ckan
+#   sudo: yes
+#   user: ubuntu
+#   hosts: webservers
+#   tasks:
+#       - name: configure our CKAN instance
+#         template: src=config/test_settings.ini dest=/etc/ckan/default/production.ini
+#
+#       - name: initialise the database
+#         command: ckan db init
+#
+#
+#       - name: Set DataStore database permissions
+#         command: ckan datastore set-permissions postgres
+#
+#
+#       - name: restart Apache
+#         service: name=apache2 state=restarted
+#
+#       - name: restart Nginx
+#         service: name=nginx state=restarted
+#
+# - name: configure backup scripts
+#   sudo: yes
+#   user: ubuntu
+#   hosts: dbservers
+#   tasks:
+#     - name: install packages for backup
+#       apt: pkg={{ item }} state=installed
+#       with_items:
+#         - python-boto
+#
+#     - name: create BOTO configuration
+#       file: path=/home/ubuntu/.boto
+#             state=touch
+#
+#     - name: set AWS access key
+#       ini_file: dest=/home/ubuntu/.boto
+#                 section=Credentials
+#                 option=aws_access_key_id
+#                 value={{ AWS_ACCESS_KEY_ID }}
+#
+#     - name: set AWS secret Key
+#       ini_file: dest=/home/ubuntu/.boto
+#                 section=Credentials
+#                 option=aws_secret_access_key
+#                 value={{ AWS_SECRET_ACCESS_KEY }}
+#
+#     - name: create UPLOAD configuration
+#       file: path=/home/ubuntu/.s3.ini
+#             state=touch
+#
+#     - name: set S3 bucket name
+#       ini_file: dest=/home/ubuntu/.s3.ini
+#                 section=Credentials
+#                 option=bucket
+#                 value={{ S3_BUCKET }}
+#
+#     - name: copy backup script
+#       copy: src=scripts/backup.sh dest=/home/ubuntu/backup.sh mode=0744 owner=ubuntu
+#
+#     - name: copy Python S3 uploader
+#       copy: src=scripts/upload.py dest=/home/ubuntu/upload.py mode=0644 owner=ubuntu
+#
+#     - name: copy restore script
+#       copy: src=scripts/restore.sh dest=/home/ubuntu/restore.sh mode=0744 owner=ubuntu
+#
+#     - name: copy Python S3 downloader
+#       copy: src=scripts/download.py dest=/home/ubuntu/download.py mode=0644 owner=ubuntu
