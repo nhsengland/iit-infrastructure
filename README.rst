@@ -3,6 +3,13 @@ IIT Infrastructure
 
 Infrastructure, scripts, deployment, other for the NHSE IIT project
 
+Setup
+-----
+
+pip install -r requirements.txt
+ansible-galaxy install -r ansible/requirements.yml
+
+
 Deployment
 ----------
 

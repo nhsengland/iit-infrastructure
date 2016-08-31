@@ -101,6 +101,22 @@
       - name: restart Nginx
         service: name=nginx state=restarted
 
+- name: Install letsencrypt and set up cron job to renew
+  hosts: webservers
+  sudo: yes
+  user: ubuntu
+  roles:
+    - role: thefinn93.letsencrypt
+      virtualenv_package_name: python-virtualenv
+      letsencrypt_email: support@openhealthcare.org.uk
+      letsencrypt_cert_domains:
+        - datacatalogue.openhealthcare.org.uk
+      letsencrypt_renewal_frequency:
+        day: 1
+        hour: 1
+        minute: 1
+      letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx"'
+
 - name: configure backup scripts
   sudo: yes
   user: ubuntu

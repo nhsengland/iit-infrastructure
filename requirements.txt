@@ -4,3 +4,4 @@ requests
 dataconverters
 unicodecsv
 messytables
+ansible==2.1.1.0
