@@ -8,6 +8,7 @@ Setup
 
 pip install -r requirements.txt
 ansible-galaxy install -r ansible/requirements.yml
+copy the example hosts file updating the server_name and other fields
 
 
 Deployment
