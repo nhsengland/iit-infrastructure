@@ -109,3 +109,14 @@ The restore process is very simple:
 * SSH into the new box that you want to restore the data to.
 * As the ubuntu user run the restore script: ``restore.sh KEYNAME`` where KEYNAME is the name of the key you looked up earlier (e.g. ``restore.sh ip-172-31-14-177``)
 * This script will grab the backup from S3, unzip it, stop Apache, restart Postgres (so pg_restore is not blocked by existing connections), use CKAN's blessed paster commands to clean then restore the main database (see http://docs.ckan.org/en/latest/maintaining/paster.html#dumping-and-loading-databases-to-from-a-file), use pg_restore to restore the datastore database (this may produce some errors that are safe to ignore), copy the filestore files back into the correct location and kick off a reindex by SOLR.
+
+Upgrading old instances
+-----------------------
+
+Run the upgrade playbook.
+
+    ansible-playbook -i hosts upgrade.yml --vault-password-file ~/.vault.txt
+
+Then update the NHS England skin
+
+    ansible-playbook -i hosts forks.yml --vault-password-file ~/.vault.txt
