@@ -3,7 +3,7 @@ proxy_temp_path /tmp/nginx_proxy 1 2;
 
 server {
     listen 80 default;
-    server_name data.england.nhs.uk;
+    server_name {{ groups["server_name"][0] }};
     rewrite ^ https://$server_name$request_uri? permanent;
 }
 
@@ -11,8 +11,8 @@ server {
     listen 443 ssl;
     client_max_body_size 100M;
     ssl on;
-    ssl_certificate      /etc/letsencrypt/live/datacatalogue.openhealthcare.org.uk/fullchain.pem;
-    ssl_certificate_key  /etc/letsencrypt/live/datacatalogue.openhealthcare.org.uk/privkey.pem;
+    ssl_certificate      /etc/letsencrypt/live/{{ groups["server_name"][0] }}/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/{{ groups["server_name"][0] }}/privkey.pem;
     ssl_protocols        TLSv1 TLSv1.1 TLSv1.2;
     ssl_ciphers RC4:HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;

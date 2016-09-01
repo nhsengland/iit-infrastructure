@@ -1,6 +1,12 @@
 ---
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+- name: configure SSL
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - ssl
 
 - name: install CKAN
   sudo: yes
@@ -44,6 +50,15 @@
   roles:
     - filestore
 
+
+- name: install plugin
+  sudo: yes
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - plugin
+
+
 - name: Install letsencrypt and set up cron job to renew
   hosts: webservers
   sudo: yes
@@ -58,15 +73,7 @@
         day: 1
         hour: 1
         minute: 1
-      letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx && /home/ubuntu/push_email.sh \'renewed ssl certificate\'"'
-
-- name: install plugin
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - plugin
-
+      letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx"'
 - name: configure ckan
   sudo: yes
   user: ubuntu
