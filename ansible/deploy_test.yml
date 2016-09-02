@@ -1,12 +1,6 @@
 ---
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
-- name: configure SSL
-  sudo: yes
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - ssl
 
 - name: install CKAN
   sudo: yes
@@ -59,21 +53,6 @@
     - plugin
 
 
-- name: Install letsencrypt and set up cron job to renew
-  hosts: webservers
-  sudo: yes
-  user: ubuntu
-  roles:
-    - role: letsencrypt
-      virtualenv_package_name: python-virtualenv
-      letsencrypt_email: support@openhealthcare.org.uk
-      letsencrypt_cert_domains:
-        - "{{ groups['server_name'][0] }}"
-      letsencrypt_renewal_frequency:
-        day: 1
-        hour: 1
-        minute: 1
-      letsencrypt_renewal_command_args: '--renew-hook "systemctl restart nginx"'
 - name: configure ckan
   sudo: yes
   user: ubuntu
