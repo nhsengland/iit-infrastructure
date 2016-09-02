@@ -68,7 +68,7 @@
       virtualenv_package_name: python-virtualenv
       letsencrypt_email: support@openhealthcare.org.uk
       letsencrypt_cert_domains:
-        - datacatalogue.openhealthcare.org.uk
+        - "{{ groups['server_name'][0] }}"
       letsencrypt_renewal_frequency:
         day: 1
         hour: 1
