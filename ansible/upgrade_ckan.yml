@@ -1,0 +1,37 @@
+---
+# This playbook will upgrade the CKAN instance on a given host.
+
+- name: upgrade CKAN
+  hosts: webservers
+  user: ubuntu
+  tasks:
+
+  - name: download CKAN package
+    get_url:
+        url="http://packaging.ckan.org.s3-eu-west-1.amazonaws.com/python-ckan_2.5-precise_amd64.deb"
+        dest=/tmp/python-ckan_2.5-precise_amd64.deb
+
+  - name: install CKAN package
+    sudo: true
+    apt: deb=/tmp/python-ckan_2.5-precise_amd64.deb
+    register: ckan_installed
+
+  - name: run setup.py for the plugin
+    sudo: true
+    command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
+
+  - name: upgrade database
+    command: /usr/lib/ckan/default/bin/paster db upgrade -c /etc/ckan/default/production.ini
+        chdir=/usr/lib/ckan/default/src/ckan
+
+  - name: restart solr
+    sudo: true
+    command: service jetty restart
+
+  - name: rebuild search index
+    sudo: true
+    command: ckan search-index rebuild -r
+
+  - name: restart apache
+    sudo: true
+    command: service apache2 restart
