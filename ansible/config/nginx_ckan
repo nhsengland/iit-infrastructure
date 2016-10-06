@@ -32,5 +32,7 @@ server {
         # In emergency comment out line to force caching
         # proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
     }
-
+    location ~ /*datastore_search_sql {
+        return 404;
+    }
 }
