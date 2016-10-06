@@ -44,12 +44,14 @@
   roles:
     - filestore
 
+
 - name: install plugin
   sudo: yes
   user: ubuntu
   hosts: webservers
   roles:
     - plugin
+
 
 - name: configure ckan
   sudo: yes

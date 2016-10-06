@@ -47,6 +47,7 @@
 - name: Tell dmswitch where to send results
   template: src=config/dms.ini dest=/home/ubuntu/dms.ini
 
+
 - shell: whoami && bin/crontool | crontab
   sudo_user: ubuntu
   args:
