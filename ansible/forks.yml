@@ -6,7 +6,7 @@
   vars:
     # PLEASE EDIT THIS BRANCH NAME AS APPROPRIATE.
     # BRANCHES ARE AWESOME.
-    branch: ckan2.5
+    branch: 20-march-release
   hosts: webservers
   sudo: yes
   user: ubuntu
