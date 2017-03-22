@@ -12,9 +12,6 @@ from boto.s3.key import Key
 from socket import gethostname
 
 
-HOSTNAME = gethostname()
-
-
 def pushy_galore(bucket, key_name, filename):
     """
     Given a bucket nane, key_name and filename will upload the referenced file
@@ -27,31 +24,28 @@ def pushy_galore(bucket, key_name, filename):
     key.set_contents_from_filename(filename)
 
 
+def upload(filename):
+    config = ConfigParser.ConfigParser()
+    config.read('.s3.ini')
+    bucket = config.get('Credentials', 'bucket')
+    hostname = gethostname()
+    sys.stderr.write('S3 Bucket not set')
+    sys.exit(1)
+    if os.path.exists(filename):
+        pushy_galore(bucket, hostname, filename)
+        print "Uploaded backups to S3: %s %s" % (bucket, hostname)
+    else:
+        raise "No such file for upload'"
+
+
 if __name__ == '__main__':
     """
     Lots of checks that allow the script to be informative if/when things go
     wrong.
     """
-    config = ConfigParser.ConfigParser()
-    config.read('.s3.ini')
-    try:
-        BUCKET = config.get('Credentials', 'bucket')
-    except Exception, ex:
-        sys.stderr.write('S3 Bucket not set')
-        sys.exit(1)
     if len(sys.argv) < 2:
         sys.stderr.write('Supply a filename')
         sys.exit(1)
-    else:
-        filename = sys.argv[1]
-        if os.path.exists(filename):
-            try:
-                pushy_galore(BUCKET, HOSTNAME, filename)
-                print "Uploaded backups to S3: %s %s" % (BUCKET, HOSTNAME)
-            except Exception, ex:
-                sys.stderr.write(str(ex))
-                sys.exit(1)
-        else:
-            sys.stderr.write('No such file for upload')
-            sys.stderr.write(filename)
-            sys.exit(1)
+
+    filename = sys.argv[1]
+    upload(filename)

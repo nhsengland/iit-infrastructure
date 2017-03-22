@@ -108,9 +108,15 @@
                 section=Credentials
                 option=bucket
                 value={{ S3_BUCKET }}
+    - name: backup requirements
+      pip: name=requests virtualenv=/home/ubuntu/backup_env
 
     - name: copy backup script
-      copy: src=scripts/backup.sh dest=/home/ubuntu/backup.sh mode=0744 owner=ubuntu
+      template:
+        src: scripts/backup.py.jinja2
+        dest: /home/ubuntu/backup.py
+        mode: 0744
+        owner: ubuntu
 
     - name: copy Python S3 uploader
       copy: src=scripts/upload.py dest=/home/ubuntu/upload.py mode=0644 owner=ubuntu
