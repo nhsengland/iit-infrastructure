@@ -28,6 +28,9 @@
       command: /usr/lib/ckan/default/bin/python setup.py develop
                chdir=/home/ubuntu/ckanext-nhsengland
 
+    - name: refresh the nginx cache
+      command: rm -rf  /tmp/nginx_cache/
+
   handlers:
     - name: Restart Apache
       service: name=apache2 state=restarted
