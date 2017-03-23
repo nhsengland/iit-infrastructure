@@ -2,6 +2,10 @@
 # This playbook installs and configures the backup functions for a production
 # instance.
 
+- name: install requests
+  sudo: true
+  pip: name=requests virtualenv=/usr/lib/ckan/default
+
 - name: install packages for backup
   apt: pkg={{ item }} state=installed
   with_items:
@@ -33,8 +37,15 @@
             option=bucket
             value={{ S3_BUCKET }}
 
+- name: backup requirements
+  pip: name=requests virtualenv=/home/ubuntu/backup_env
+
 - name: copy backup script
-  copy: src=scripts/backup.sh dest=/home/ubuntu/backup.sh mode=0744 owner=ubuntu
+  template:
+    src: scripts/backup.py.jinja2
+    dest: /home/ubuntu/backup.py
+    mode: 0744
+    owner: ubuntu
 
 - name: copy Python S3 uploader
   copy: src=scripts/upload.py dest=/home/ubuntu/upload.py mode=0644 owner=ubuntu
@@ -46,4 +57,4 @@
   copy: src=scripts/download.py dest=/home/ubuntu/download.py mode=0644 owner=ubuntu
 
 - name: configure CRON
-  cron: name="run backup" hour="1" minute="1" user="ubuntu" job="/home/ubuntu/backup.sh"
+  cron: name="run backup" hour="1" minute="1" user="ubuntu" job="/home/ubuntu/backup_env/bin/python /home/ubuntu/backup.py"
