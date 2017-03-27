@@ -1,10 +1,4 @@
 ---
 # This playbook configures S3 backups.
-- name: Update Git repo
-  git: repo=https://github.com/ckan/ckanext-s3archive.git dest=/home/ubuntu/ckanext-s3archive update=yes
-
-- name: run setup.py for the plugin
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-s3archive
-
 - name: Ensure Ubuntu user can write to FileStore directory
   acl: name=/var/lib/ckan/default entity=ubuntu etype=user permissions=u+rwx
