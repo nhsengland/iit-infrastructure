@@ -14,7 +14,7 @@ def send_email(subject, text):
         "{{ SUPPORT_EMAIL_END_POINT }}",
         auth=("api", "{{ SUPPORT_EMAIL_API_KEY }}"),
         data={
-            "from": "{{ SUPPORT_EMAIL_FROM }}"
+            "from": "{{ SUPPORT_EMAIL_FROM }}",
             "to": ["{{ SUPPORT_EMAIL_TO }}"],
             "subject": subject,
             "text": text
