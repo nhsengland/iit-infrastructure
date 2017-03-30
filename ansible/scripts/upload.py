@@ -29,8 +29,6 @@ def upload(filename):
     config.read('.s3.ini')
     bucket = config.get('Credentials', 'bucket')
     hostname = gethostname()
-    sys.stderr.write('S3 Bucket not set')
-    sys.exit(1)
     if os.path.exists(filename):
         pushy_galore(bucket, hostname, filename)
         print "Uploaded backups to S3: %s %s" % (bucket, hostname)

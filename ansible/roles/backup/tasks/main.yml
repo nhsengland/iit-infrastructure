@@ -38,7 +38,10 @@
             value={{ S3_BUCKET }}
 
 - name: backup requirements
-  pip: name=requests virtualenv=/home/ubuntu/backup_env
+  pip: name=requests version=2.11.1 virtualenv=/home/ubuntu/backup_env
+
+- name: backup boto
+  pip: name=boto version=2.36.0 virtualenv=/home/ubuntu/backup_env
 
 - name: copy backup script
   template:

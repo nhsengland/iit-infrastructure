@@ -47,8 +47,14 @@ def backup():
         subprocess.check_call(backup_ckan_metadata_cmd, shell=True)
 
         print "dumping datastore data"
-        backup_datastore_cmd = 'sudo su - postgres -c "pg_dump -Fc datastore_default" > "{}/datastore_default.dump"'
-        backup_datastore_cmd = backup_datastore_cmd.format(backup_dir )
+        datastore_target_dir = '{}/datastore_default.dump'.format(backup_dir)
+        backup_datastore_cmd = 'sudo -u postgres pg_dump -Fc datastore_default > {}'
+        backup_datastore_cmd = backup_datastore_cmd.format(datastore_target_dir)
+        print "running {}".format(backup_datastore_cmd)
+        subprocess.check_call(backup_datastore_cmd, shell=True)
+
+        if not os.path.exists(datastore_target_dir):
+            raise ValueError("Datastore dump not saved")
 
         print "tar-ing data"
         shutil.copytree("/var/lib/ckan/default", "{}/default".format(backup_dir))
@@ -57,7 +63,6 @@ def backup():
 
         print "uploading data"
         upload.upload(backup_target)
-        subprocess.check_output("$(eval echo ~${SUDO_USER})", shell=True)
     except Exception as es:
         print "errorred with {}".format(str(es))
         send_email("Issue with the nhs england back up", str(es))
