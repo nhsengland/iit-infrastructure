@@ -1,0 +1,27 @@
+---
+- name: Remove outdated system packaged pip
+  become: true
+  apt:
+    name: python-pip
+    state: absent
+
+- name: Download pip installer
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /tmp/get-pip.py
+    mode: 0440
+
+- name: Install pip
+  become: true
+  command: /usr/bin/python /tmp/get-pip.py
+  args:
+    creates: /usr/local/bin/pip
+
+- name: Ensure python package tools are up to date
+  become: true
+  pip:
+    name: '{{ item }}'
+    extra_args: '--upgrade'
+  with_items:
+    - pip
+    - setuptools

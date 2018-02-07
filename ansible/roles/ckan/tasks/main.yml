@@ -21,7 +21,6 @@
     - zip
     - screen
     - python-boto
-    - python-pip
     - python-virtualenv
     - libmemcached-dev
     - memcached
