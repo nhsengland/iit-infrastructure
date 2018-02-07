@@ -7,10 +7,10 @@ various sysop-y type "stuff".
 Setup
 -----
 
-You need to have Ansible installed. Make sure it is a recent (>1.6) version or you will encounter
-errors running the deb module
+You need to have Ansible installed. Make sure it is a recent (>2.4) version or you will encounter
+errors running the deb module.
 
-I simply created a virtualenv and pip installed ansible. Full docs here: http://docs.ansible.com/index.html
+The cleanest way to do this is with `pipsi <https://github.com/mitsuhiko/pipsi>`.  Full ansible docs here: http://docs.ansible.com/index.html
 
 Make sure you create/update the hosts file to something like the following::
 
