@@ -9,7 +9,7 @@
 
 - name: rollback
   hosts: webservers
-  sudo: yes
+  become: true
   user: ubuntu
   gather_facts: false
 
