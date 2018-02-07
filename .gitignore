@@ -6,3 +6,4 @@ tests/performance_tests/*/results
 *.log
 *.pem
 ansible.cfg
+.vault.txt
