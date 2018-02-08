@@ -3,10 +3,11 @@
 - name: update apt-cache
   apt: update_cache=yes
 
-- name: install Postgres and psycopg2
+- name: install Postgres, its headers, and psycopg2
   apt: pkg={{ item }} state=installed
   with_items:
     - postgresql
+    - postgresql-server-dev-9.5
     - python-psycopg2
 
 - name: add ckan_default database user

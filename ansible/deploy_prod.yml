@@ -25,6 +25,13 @@
   roles:
     - apache
 
+- name: install and configure Postgres
+  become: true
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - db
+
 - name: install CKAN
   become: true
   user: ubuntu
@@ -38,13 +45,6 @@
   hosts: solr
   roles:
     - solr
-
-- name: install and configure Postgres
-  become: true
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - db
 
 - name: install and configure DataStore
   become: true
@@ -111,12 +111,10 @@
         template: src=config/prod_settings.ini dest=/etc/ckan/default/production.ini
 
       - name: initialise the database
-        command: ckan db init
-
+        command: /usr/lib/ckan/default/bin/paster --plugin=ckan db init -c /etc/ckan/default/production.ini
 
       - name: Set DataStore database permissions
-        command: ckan datastore set-permissions postgres
-
+        command: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/production.ini postgres
 
       - name: restart Apache
         service: name=apache2 state=restarted
