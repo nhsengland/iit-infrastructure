@@ -7,19 +7,19 @@
   apt: pkg={{ item }} state=installed
   with_items:
     - solr-jetty
-    - openjdk-6-jdk
+    - openjdk-8-jdk
 
 - name: update SOLR configuration - NO_START
-  lineinfile: 'dest=/etc/default/jetty regexp=^NO_START line="NO_START=0"'
+  lineinfile: 'dest=/etc/default/jetty8 regexp=^NO_START line="NO_START=0"'
 
 - name: update SOLR configuration - JETTY_HOST
-  lineinfile: 'dest=/etc/default/jetty regexp=^JETTY_HOST line="JETTY_HOST={{ solr_host }}"'
+  lineinfile: 'dest=/etc/default/jetty8 regexp=^JETTY_HOST line="JETTY_HOST={{ solr_host }}"'
 
 - name: update SOLR configuration - JETTY_PORT
-  lineinfile: 'dest=/etc/default/jetty regexp=^JETTY_PORT line="JETTY_PORT={{ solr_port }}"'
+  lineinfile: 'dest=/etc/default/jetty8 regexp=^JETTY_PORT line="JETTY_PORT={{ solr_port }}"'
 
 - name: update SOLR configuration - JAVA_HOME
-  lineinfile: 'dest=/etc/default/jetty regexp=JAVA_HOME line="JAVA_HOME=/usr/lib/jvm/java-6-openjdk-amd64/"'
+  lineinfile: 'dest=/etc/default/jetty8 regexp=JAVA_HOME line="JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"'
 
 - name: backup SOLR schema.xml
   command: mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
