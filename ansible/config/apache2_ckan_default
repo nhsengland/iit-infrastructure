@@ -1,5 +1,5 @@
 WSGISocketPrefix /var/run/wsgi
-<VirtualHost 0.0.0.0:8080>
+<VirtualHost 127.0.0.1:8080>
 
     ServerName data.england.nhs.uk
     ServerAlias www.data.england.nhs.uk

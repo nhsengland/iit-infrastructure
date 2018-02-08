@@ -8,8 +8,6 @@
   apt: pkg={{ item }} state=installed
   with_items:
     - nginx
-    - apache2
-    - libapache2-mod-wsgi
     - libpq5
     - emacs
     - git

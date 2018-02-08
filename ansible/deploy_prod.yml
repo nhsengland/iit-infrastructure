@@ -18,6 +18,13 @@
   roles:
     - pip
 
+- name: install Apache
+  become: true
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - apache
+
 - name: install CKAN
   become: true
   user: ubuntu
