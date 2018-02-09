@@ -34,6 +34,7 @@
     path: /usr/lib/ckan/default
     state: directory
     mode: 0755
+    owner: ubuntu
 
 - name: create CKAN etc directory
   become: true
@@ -44,10 +45,12 @@
 
 - name: create CKAN virtualenv
   become: true
+  become_user: ubuntu
   command: virtualenv /usr/lib/ckan/default
 
 - name: install CKAN from git repository
   become: true
+  become_user: ubuntu
   pip:
     editable: true
     name: git+https://github.com/ckan/ckan.git@ckan-2.2.4#egg=ckan
@@ -55,6 +58,7 @@
 
 - name: install CKAN python requirements
   become: true
+  become_user: ubuntu
   pip:
     requirements: /usr/lib/ckan/default/src/ckan/requirements.txt
     virtualenv: /usr/lib/ckan/default
@@ -72,6 +76,7 @@
 
 - name: install pylibmc
   become: true
+  become_user: ubuntu
   pip:
     name: pylibmc
     virtualenv: /usr/lib/ckan/default
