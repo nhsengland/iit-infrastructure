@@ -28,7 +28,7 @@ Make sure you create/update the hosts file to something like the following::
 
 (Replace with the appropriate hostname[s] - look in hosts.example for hints)
 
-Please ensure you have the correct keys (pem) for the instances you hope to manage.
+Please ensure you have the correct pem file for the instances you hope to manage.  It should live in `~/.ssh`.  If you want to keep it somewhere else you will need to modify your working copy of `ansible/ansible.cfg`.
 
 Deploying
 ---------
