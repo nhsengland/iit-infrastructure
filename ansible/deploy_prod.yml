@@ -18,6 +18,13 @@
   roles:
     - pip
 
+- name: install and configure SOLR
+  become: true
+  user: ubuntu
+  hosts: solr
+  roles:
+    - solr
+
 - name: install Apache
   become: true
   user: ubuntu
@@ -38,13 +45,6 @@
   hosts: webservers
   roles:
     - ckan
-
-- name: install and configure SOLR
-  become: true
-  user: ubuntu
-  hosts: solr
-  roles:
-    - solr
 
 - name: install and configure DataStore
   become: true

@@ -21,12 +21,10 @@
 - name: update SOLR configuration - JAVA_HOME
   lineinfile: 'dest=/etc/default/jetty8 regexp=JAVA_HOME line="JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"'
 
-- name: backup SOLR schema.xml
-  command: mv /etc/solr/conf/schema.xml /etc/solr/conf/schema.xml.bak
-
 - name: copy solrconfig.xml
-  copy: src=config/solrconfig.xml dest=/etc/solr/conf/solrconfig.xml mode=0644 owner=root
-
-- name: update SOLR schema.xml
-  file: path=/etc/solr/conf/schema.xml src=/usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml state=link
+  template:
+    src: config/solrconfig.xml
+    dest: /etc/solr/conf/solrconfig.xml
+    mode: 644
+    owner: root
   notify: Restart Jetty

@@ -80,3 +80,15 @@
   pip:
     name: pylibmc
     virtualenv: /usr/lib/ckan/default
+
+- name: remove existing Solr schema.xml
+  file:
+    path: /etc/solr/conf/schema.xml
+    state: absent
+
+- name: link SOLR schema.xml from Ckan
+  file:
+    src: /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml
+    dest: /etc/solr/conf/schema.xml
+    state: link
+  notify: Restart Jetty
