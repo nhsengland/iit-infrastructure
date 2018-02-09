@@ -37,17 +37,17 @@ Make sure you have the Ansible vault password in the .vault.txt file (available 
 
 Simply run the following command in this directory and "it should just work" (tm) to install a test instance::
 
-    ansible-playbook -i hosts deploy_test.yml --vault-password-file ~/.vault.txt
+    ansible-playbook hosts deploy_test.yml --vault-password-file .vault.txt
 
 This brings up an empty "basic" CKAN instance with NHSEngland branding.
 
 If you want to deploy a "full" production type instance with all the bells and whistles, you need to type::
 
-    ansible-playbook -i hosts deploy_prod.yml --vault-password-file ~/.vault.txt
+    ansible-playbook hosts deploy_prod.yml --vault-password-file .vault.txt
 
 If you just want to deploy publish-o-matic then you need to run::
 
-    ansible-playbook -i hosts deploy_publishomatic.yml --vault-password-file ~/.vault.txt
+    ansible-playbook hosts deploy_publishomatic.yml --vault-password-file .vault.txt
 
 Configuring publishomatic
 -------------------------
@@ -69,7 +69,7 @@ Deploying changes to Ckanext NHSEngland
 
 Simply run the following command in this directory and "it should just work" (tm)::
 
-    ansible-playbook -i hosts update.yml --vault-password-file ~/.vault.txt
+    ansible-playbook hosts update.yml --vault-password-file .vault.txt
 
 
 Rolling back changes to Ckanext NHSEngland
@@ -83,8 +83,8 @@ You can roll back either to tags (by name), or to specific commits (by hash).
 
 Example commandline usage::
 
-     ansible-playbook -i hosts rollback.yml --extra-vars="tag=Alpha" --vault-password-file ~/.vault.txt
-     ansible-playbook -i hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999" --vault-password-file ~/.vault.txt
+     ansible-playbook hosts rollback.yml --extra-vars="tag=Alpha" --vault-password-file .vault.txt
+     ansible-playbook hosts rollback.yml --extra-vars="commit=ec8f7ae323bdfcc8baa68d669b913e4fd23fb999" --vault-password-file .vault.txt
 
 Database backup and restore
 ---------------------------
