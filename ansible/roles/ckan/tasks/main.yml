@@ -48,6 +48,14 @@
   become_user: ubuntu
   command: virtualenv /usr/lib/ckan/default
 
+- name: install an older setuptools for CKAN
+  become: true
+  become_user: ubuntu
+  pip:
+    name: setuptools
+    version: 36.1
+    virtualenv: /usr/lib/ckan/default
+
 - name: install CKAN from git repository
   become: true
   become_user: ubuntu
