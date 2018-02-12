@@ -27,6 +27,8 @@
     - php5.6-curl
 
 - name: clone git repository
+  become: true
+  become_user: ubuntu
   git:
     repo: '{{ git_protocol }}github.com/nhsengland/datadirectory'
     dest: /home/ubuntu/datadirectory
