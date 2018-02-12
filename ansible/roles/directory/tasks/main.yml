@@ -2,7 +2,7 @@
 # This playbook installs the data directory
 
 - name: install packages for repos
-  sudo: yes
+  become: true
   apt: pkg={{ item }} state=installed
   with_items:
     - git
@@ -11,18 +11,25 @@
     - php5-curl
 
 - name: clone git repository
-  git: repo={{ git_protocol }}github.com/nhsengland/datadirectory
-       dest=/home/ubuntu/datadirectory
-       version=master
+  git:
+    repo: '{{ git_protocol }}github.com/nhsengland/datadirectory'
+    dest: /home/ubuntu/datadirectory
+    version: master
 
 - name: copy apache2 config
-  sudo: yes
-  copy: src=config/apache2_ckan_default dest=/etc/apache2/sites-available/ckan_default.conf mode=0644 owner=root
+  become: true
+  template:
+    src: config/apache2_ckan_default
+    dest: /etc/apache2/sites-available/ckan_default.conf
+    mode: 0644
+    owner: root
 
 - name: restart Apache
-  sudo: yes
+  become: true
   service: name=apache2 state=restarted
 
 - name: delete nginx cache
-  sudo: yes
-  command: rm -rf /tmp/nginx_cache
+  become: true
+  file:
+    path: /tmp/nginx_cache
+    state: absent
