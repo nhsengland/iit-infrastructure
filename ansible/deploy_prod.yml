@@ -122,6 +122,12 @@
       - name: restart Nginx
         service: name=nginx state=restarted
 
+- name: deploy data directory
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - directory
+
 - name: configure backup scripts
   become: true
   user: ubuntu
