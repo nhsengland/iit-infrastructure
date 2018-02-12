@@ -34,14 +34,6 @@
     dest: /home/ubuntu/datadirectory
     version: master
 
-- name: copy apache2 config
-  become: true
-  template:
-    src: config/apache2_ckan_default
-    dest: /etc/apache2/sites-available/ckan_default.conf
-    mode: 0644
-    owner: root
-
 - name: restart Apache
   become: true
   service: name=apache2 state=restarted
