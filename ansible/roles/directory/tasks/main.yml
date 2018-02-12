@@ -1,14 +1,30 @@
 ---
 # This playbook installs the data directory
 
+- name: install git
+  become: true
+  apt:
+    pkg: git
+    state: installed
+
+- name: add Launchpad's key ID
+  become: true
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 14aa40ec0831756756d7f66c4f4ea0aae5267a6c
+
+- name: add PHP PPA
+  become: true
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
 - name: install packages for repos
   become: true
   apt: pkg={{ item }} state=installed
   with_items:
-    - git
-    - php5
-    - libapache2-mod-php5
-    - php5-curl
+    - php5.6
+    - libapache2-mod-php5.6
+    - php5.6-curl
 
 - name: clone git repository
   git:
