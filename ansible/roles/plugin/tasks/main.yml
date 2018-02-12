@@ -15,7 +15,7 @@
     - swig
     - python-dev
 
-- name: clone git repository
+- name: clone ckanext-nhsengland git repository
   become: true
   become_user: ubuntu
   git:
@@ -27,15 +27,3 @@
   become: true
   become_user: ubuntu
   command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
-
-- name: clone git repository
-  become: true
-  become_user: ubuntu
-  git:
-    repo: "{{ git_protocol }}{{ git_repos_adfs }}"
-    dest: /home/ubuntu/ckanext-adfs
-
-- name: run setup.py for adfs plugin
-  become: true
-  become_user: ubuntu
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-adfs
