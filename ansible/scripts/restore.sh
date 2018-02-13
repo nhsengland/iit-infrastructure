@@ -9,11 +9,11 @@
 set -e
 
 # Set some useful variables.
-USER_HOME=$(eval echo ~${SUDO_USER})
+USER_HOME=$(eval echo "~${SUDO_USER}")
 
 # Download from S3
-cd $USER_HOME
-python download.py $1
+cd "$USER_HOME"
+python download.py "$1"
 
 # Untar/gunzip it
 rm -rf restored
