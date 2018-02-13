@@ -35,4 +35,7 @@ server {
     location ~ /*datastore_search_sql {
         return 404;
     }
+    location ~ /api/1/util/snippet/api_info.html {
+    	return 404;
+    }    
 }
