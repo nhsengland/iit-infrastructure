@@ -32,6 +32,11 @@ server {
         # In emergency comment out line to force caching
         # proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
     }
+    location /ncdr/ {
+        access_log  /var/log/nginx/access.log;
+        rewrite /ncdr/(.*) /$1 break;
+    	proxy_pass http://ec2-52-19-157-201.eu-west-1.compute.amazonaws.com;
+    }    
     location ~ /*datastore_search_sql {
         return 404;
     }
