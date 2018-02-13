@@ -19,9 +19,8 @@ python download.py $1
 rm -rf restored
 mkdir restored
 mv "backup-$1.tgz" restored/
-cd restored
-tar xfvz "backup-$1.tgz"
-cd ..
+
+tar xfz "restored/backup-$1.tgz" --directory=restored
 
 # Kick some services in an appropriate way so restore isn't blocked.
 sudo service apache2 stop
