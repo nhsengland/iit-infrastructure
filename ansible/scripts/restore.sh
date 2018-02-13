@@ -6,6 +6,8 @@
 # 2. A copy of the SOLR data directory.
 # 3. A copy of CKAN's filestore directory.
 
+set -e
+
 # Set some useful variables.
 USER_HOME=$(eval echo ~${SUDO_USER})
 
