@@ -30,7 +30,7 @@ sudo service postgresql restart
 # Restore the databases.
 sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db clean -c /etc/ckan/default/production.ini
 sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db load -c /etc/ckan/default/production.ini "$restore_dir/ckan_default.sql"
-sudo su - postgres -c "pg_restore -d datastore_default -c" < "$restore_dir/datastore_default.dump"
+sudo --user=postgres pg_restore --dbname="datastore_default" --clean --if-exists "$restore_dir/datastore_default.dump"
 
 # Copy the filestore directory into the backup directory.
 sudo cp -r "$restore_dir/default/"* /var/lib/ckan/default
