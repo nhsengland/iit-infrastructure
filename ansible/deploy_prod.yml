@@ -2,85 +2,108 @@
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
 
-- name: install CKAN
-  sudo: yes
+- name: "Bootstrap Python 2"
+  become: true
+  hosts: all
+  gather_facts: false
   user: ubuntu
-  hosts: webservers
+  tasks:
+    - name: Install Python 2
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- name: Modernise pip
+  become: true
+  user: ubuntu
+  hosts: dbservers
   roles:
-    - ckan
+    - pip
 
 - name: install and configure SOLR
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: solr
   roles:
     - solr
 
+- name: install Apache
+  become: true
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - apache
+
 - name: install and configure Postgres
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   roles:
     - db
 
+- name: install CKAN
+  become: true
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - ckan
+
 - name: install and configure DataStore
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   roles:
     - datastore
 
 - name: install and configure DataPusher
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - datapusher
 
 - name: install and configure FileStore
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - filestore
 
 - name: install plugin
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - plugin
 
 - name: install adfs
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - adfs
 
 - name: configure email
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - email
 
 - name: configure S3 filestore
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - s3
 
 - name: configure SSL
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - ssl
 
 - name: configure ckan
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   tasks:
@@ -88,12 +111,10 @@
         template: src=config/prod_settings.ini dest=/etc/ckan/default/production.ini
 
       - name: initialise the database
-        command: ckan db init
-
+        command: /usr/lib/ckan/default/bin/paster --plugin=ckan db init -c /etc/ckan/default/production.ini
 
       - name: Set DataStore database permissions
-        command: ckan datastore set-permissions postgres
-
+        command: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/production.ini postgres
 
       - name: restart Apache
         service: name=apache2 state=restarted
@@ -101,8 +122,14 @@
       - name: restart Nginx
         service: name=nginx state=restarted
 
+- name: deploy data directory
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - directory
+
 - name: configure backup scripts
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   roles:

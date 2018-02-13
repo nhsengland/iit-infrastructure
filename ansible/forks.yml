@@ -8,7 +8,7 @@
     # BRANCHES ARE AWESOME.
     branch: datadirectory
   hosts: webservers
-  sudo: yes
+  become: true
   user: ubuntu
   gather_facts: false
   tasks:

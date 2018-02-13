@@ -1,28 +1,45 @@
 ---
 # This playbook installs the data directory
 
+- name: install git
+  become: true
+  apt:
+    pkg: git
+    state: installed
+
+- name: add Launchpad's key ID
+  become: true
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 14aa40ec0831756756d7f66c4f4ea0aae5267a6c
+
+- name: add PHP PPA
+  become: true
+  apt_repository:
+    repo: 'ppa:ondrej/php'
+
 - name: install packages for repos
-  sudo: yes
+  become: true
   apt: pkg={{ item }} state=installed
   with_items:
-    - git
-    - php5
-    - libapache2-mod-php5
-    - php5-curl
+    - php5.6
+    - libapache2-mod-php5.6
+    - php5.6-curl
 
 - name: clone git repository
-  git: repo={{ git_protocol }}github.com/nhsengland/datadirectory
-       dest=/home/ubuntu/datadirectory
-       version=master
-
-- name: copy apache2 config
-  sudo: yes
-  copy: src=config/apache2_ckan_default dest=/etc/apache2/sites-available/ckan_default.conf mode=0644 owner=root
+  become: true
+  become_user: ubuntu
+  git:
+    repo: '{{ git_protocol }}github.com/nhsengland/datadirectory'
+    dest: /home/ubuntu/datadirectory
+    version: master
 
 - name: restart Apache
-  sudo: yes
+  become: true
   service: name=apache2 state=restarted
 
 - name: delete nginx cache
-  sudo: yes
-  command: rm -rf /tmp/nginx_cache
+  become: true
+  file:
+    path: /tmp/nginx_cache
+    state: absent

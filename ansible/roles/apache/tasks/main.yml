@@ -1,0 +1,31 @@
+---
+# This playbook installs Apache with non-default ports
+- name: install and configure Apache
+  apt: pkg={{ item }} state=installed
+  with_items:
+    - apache2
+    - libapache2-mod-rpaf
+    - libapache2-mod-wsgi
+
+- name: remove default Apache site
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+
+- name: Apache listen on port 8080
+  lineinfile: dest=/etc/apache2/ports.conf regexp="^Listen 80" line="Listen 8080" state=present
+
+- name: copy Apache vhost configuration
+  template:
+    src: config/apache2_ckan_default
+    dest: /etc/apache2/sites-available/ckan_default.conf
+    mode: 664
+    owner: root
+
+- name: enable Apache vhost
+  file:
+    src: /etc/apache2/sites-available/ckan_default.conf
+    dest: /etc/apache2/sites-enabled/ckan_default.conf
+    state: link
+  notify:
+    - Restart Apache

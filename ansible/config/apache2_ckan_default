@@ -1,5 +1,5 @@
 WSGISocketPrefix /var/run/wsgi
-<VirtualHost 0.0.0.0:8080>
+<VirtualHost 127.0.0.1:8080>
 
     ServerName data.england.nhs.uk
     ServerAlias www.data.england.nhs.uk
@@ -21,5 +21,15 @@ WSGISocketPrefix /var/run/wsgi
 
     ErrorLog /var/log/apache2/ckan_default.error.log
     CustomLog /var/log/apache2/ckan_default.custom.log combined
+
+    <IfModule mod_rpaf.c>
+        RPAFenable On
+        RPAFsethostname On
+        RPAFproxy_ips 127.0.0.1
+    </IfModule>
+
+    <Directory />
+        Require all granted
+    </Directory>
 
 </VirtualHost>

@@ -1,5 +1,0 @@
-- name: Deploy Directory
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - directory

@@ -3,7 +3,8 @@
 # instance.
 
 - name: install requests
-  sudo: true
+  become: true
+  become_user: ubuntu
   pip: name=requests virtualenv=/usr/lib/ckan/default
 
 - name: install packages for backup

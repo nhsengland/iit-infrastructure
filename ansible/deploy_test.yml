@@ -3,56 +3,56 @@
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
 
 - name: install CKAN
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - ckan
 
 - name: install and configure SOLR
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: solr
   roles:
     - solr
 
 - name: install and configure Postgres
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   roles:
     - db
 
 - name: install and configure DataStore
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   roles:
     - datastore
 
 - name: install and configure DataPusher
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - datapusher
 
 - name: install and configure FileStore
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - filestore
 
 - name: install plugin
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   roles:
     - plugin
 
 - name: configure ckan
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: webservers
   tasks:
@@ -74,7 +74,7 @@
         service: name=nginx state=restarted
 
 - name: configure backup scripts
-  sudo: yes
+  become: true
   user: ubuntu
   hosts: dbservers
   tasks:

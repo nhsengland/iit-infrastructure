@@ -12,5 +12,13 @@
 - name: copy nginx config
   copy: src=config/nginx_ckan dest=/etc/nginx/sites-available/ckan mode=0644 owner=root
 
-- name: copy apache2 config
-  copy: src=config/apache2_ckan_default dest=/etc/apache2/sites-available/ckan_default.conf mode=0644 owner=root
+- name: deactivate default nginx site
+  file:
+    name: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: activate ckan nginx site
+  file:
+    src: /etc/nginx/sites-available/ckan
+    dest: /etc/nginx/sites-enabled/ckan
+    state: link
