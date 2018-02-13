@@ -36,7 +36,7 @@ echo "Restarted Postgres"
 sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db upgrade --config=/etc/ckan/default/production.ini
 echo "Upgraded database schema"
 
-sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db clean -c /etc/ckan/default/production.ini
+sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db clean --config=/etc/ckan/default/production.ini
 
 # FIXME: generate a .dump file in the backup script
 sudo --user=postgres psql --quiet --dbname=ckan_default --file="$restore_dir/ckan_default.sql"
@@ -57,4 +57,4 @@ sudo service apache2 start
 echo "Started Apache"
 
 # Reindex SOLR:
-/usr/lib/ckan/default/bin/paster --plugin=ckan user list -c /etc/ckan/default/production.ini search-index rebuild
+/usr/lib/ckan/default/bin/paster --plugin=ckan user list --config=/etc/ckan/default/production.ini search-index rebuild
