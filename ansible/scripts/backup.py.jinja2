@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+import glob
 import os
 import shutil
 import socket
@@ -44,11 +46,11 @@ def backup():
     if os.path.exists(backup_dir):
         shutil.rmtree(backup_dir)
     os.makedirs(backup_dir)
-    print('makeing {}'.format(backup_dir))
+    print('Created {}'.format(backup_dir))
 
-    for f in os.listdir(user_home):
-        if f.endswith('tgz'):
-            os.remove(os.path.join(user_home, f))
+    for f in glob.iglob(os.path.join(user_home, '*.tgz')):
+        os.remove(f)
+    print('Removed tarballs')
 
     dump_database(backup_dir, 'ckan_default')
     dump_database(backup_dir, 'datastore_default')
