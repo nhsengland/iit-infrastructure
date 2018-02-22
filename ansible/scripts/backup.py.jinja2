@@ -8,8 +8,6 @@ from datetime import datetime
 import requests
 import upload
 
-EMAIL_ON_SUCCESS = True
-
 
 def send_email(subject, text):
     return requests.post(
