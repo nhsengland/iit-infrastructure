@@ -22,6 +22,17 @@ def send_email(subject, text):
     )
 
 
+def dump_database(backup_dir, database):
+    print('Dumping database: {}'.format(database))
+    target = os.path.join(backup_dir, '{}.dump'.format(database))
+    command = 'sudo -u postgres pg_dump --format=custom {} --file={}'.format(database, target)
+    print('Running: {}'.format(command))
+    subprocess.check_call(command, shell=True)
+
+    if not os.path.exists(target):
+        raise Exception('Database dump not saved for: {}'.format(database))
+
+
 def backup():
     user_home = os.path.expanduser('~')
     hostname = socket.gethostname()
@@ -38,22 +49,9 @@ def backup():
     for f in os.listdir(user_home):
         if f.endswith('tgz'):
             os.remove(os.path.join(user_home, f))
-    print('dumping ckan metadata data')
-    print(os.stat('/usr/lib/ckan/default/bin/paster'))
-    backup_ckan_metadata_cmd = '/usr/lib/ckan/default/bin/paster --plugin=ckan db dump -c /etc/ckan/default/production.ini {}'
-    backup_ckan_metadata_cmd = backup_ckan_metadata_cmd.format(os.path.join(backup_dir, 'ckan_default.sql'))
-    print('running {}'.format(backup_ckan_metadata_cmd))
-    subprocess.check_call(backup_ckan_metadata_cmd, shell=True)
 
-    print('dumping datastore data')
-    datastore_target_dir = '{}/datastore_default.dump'.format(backup_dir)
-    backup_datastore_cmd = 'sudo -u postgres pg_dump -Fc datastore_default > {}'
-    backup_datastore_cmd = backup_datastore_cmd.format(datastore_target_dir)
-    print('running {}'.format(backup_datastore_cmd))
-    subprocess.check_call(backup_datastore_cmd, shell=True)
-
-    if not os.path.exists(datastore_target_dir):
-        raise ValueError('Datastore dump not saved')
+    dump_database(backup_dir, 'ckan_default')
+    dump_database(backup_dir, 'datastore_default')
 
     print('tar-ing data')
     os.system('cp -r /var/lib/ckan/default {}/default'.format(backup_dir))
