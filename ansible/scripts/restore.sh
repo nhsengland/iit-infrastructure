@@ -55,4 +55,4 @@ sudo service apache2 start
 echo "Started Apache"
 
 # Reindex SOLR:
-/usr/lib/ckan/default/bin/paster --plugin=ckan user list --config=/etc/ckan/default/production.ini search-index rebuild
+/usr/lib/ckan/default/bin/paster --plugin=ckan search-index rebuild --config /etc/ckan/default/production.ini
