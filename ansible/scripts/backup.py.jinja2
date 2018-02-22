@@ -27,9 +27,10 @@ def send_email(subject, text):
 def dump_database(backup_dir, database):
     print('Dumping database: {}'.format(database))
     target = os.path.join(backup_dir, '{}.dump'.format(database))
-    command = 'sudo -u postgres pg_dump --format=custom {} --file={}'.format(database, target)
+    command = 'sudo -u postgres pg_dump --format=custom {}'.format(database)
     print('Running: {}'.format(command))
-    subprocess.check_call(command, shell=True)
+    with open(target, 'wb') as out:
+        subprocess.Popen(command, stdout=out, shell=True)
 
     if not os.path.exists(target):
         raise Exception('Database dump not saved for: {}'.format(database))
