@@ -57,10 +57,10 @@ def backup():
 
     shutil.copytree('/var/lib/ckan/default', os.path.join(backup_dir, 'default'))
 
-    print('tar-ing data')
-    subprocess.check_call('tar cfz {} {}'.format(backup_target, backup_dir), shell=True)
+    print('Building tarball')
+    subprocess.check_call('tar czf {} --directory={} .'.format(backup_target, backup_dir), shell=True)
 
-    print('uploading data')
+    print('Uploading tarball')
     upload.upload(backup_target)
 
 
