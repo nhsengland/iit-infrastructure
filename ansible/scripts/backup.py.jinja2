@@ -64,6 +64,8 @@ def backup():
     print('Uploading tarball')
     upload.upload(backup_target)
 
+    shutil.rmtree(os.path.join(backup_dir, 'default'))
+
 
 if __name__ == '__main__':
     try:
