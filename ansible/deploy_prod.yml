@@ -2,6 +2,13 @@
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
 
+- name: Install common packages
+  become: true
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - common
+
 - name: "Bootstrap Python 2"
   become: true
   hosts: all

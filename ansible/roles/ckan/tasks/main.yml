@@ -1,29 +1,5 @@
 ---
 # This playbook sets installs the CKAN application.
-- name: update apt-cache
-  become: true
-  apt: update_cache=yes
-
-- name: install packages for CKAN
-  apt: pkg={{ item }} state=installed
-  with_items:
-    - nginx
-    - libpq5
-    - emacs
-    - git
-    - htop
-    - iotop
-    - tree
-    - ack-grep
-    - vim
-    - zip
-    - screen
-    - python-boto
-    - python-virtualenv
-    - libmemcached-dev
-    - memcached
-    - python-dev
-    - build-essential
 
 # TODO: swap the following (except the pylibmc block) out for the old deb
 # install when CKAN release a 16.04 compatible version.
