@@ -56,7 +56,6 @@
     - directory
 
 - name: configure backup scripts
-  become: true
   user: ubuntu
   hosts: dbservers
   roles:

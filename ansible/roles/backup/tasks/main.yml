@@ -1,48 +1,27 @@
 ---
-# This playbook installs and configures the backup functions for a production
-# instance.
-
-- name: install requests
-  become: true
-  become_user: ubuntu
-  pip: name=requests virtualenv=/usr/lib/ckan/default
-
-- name: install packages for backup
-  apt: pkg={{ item }} state=installed
-  with_items:
-    - python-boto
+# This playbook installs and configures the backups
 
 - name: create BOTO configuration
-  file: path=/home/ubuntu/.boto
-        state=touch
+  template:
+    src: config/boto.ini
+    dest: /home/ubuntu/.boto
 
-- name: set AWS access key
-  ini_file: dest=/home/ubuntu/.boto
-            section=Credentials
-            option=aws_access_key_id
-            value={{ AWS_ACCESS_KEY_ID }}
-
-- name: set AWS secret Key
-  ini_file: dest=/home/ubuntu/.boto
-            section=Credentials
-            option=aws_secret_access_key
-            value={{ AWS_SECRET_ACCESS_KEY }}
-
-- name: create UPLOAD configuration
-  file: path=/home/ubuntu/.s3.ini
-        state=touch
-
-- name: set S3 bucket name
-  ini_file: dest=/home/ubuntu/.s3.ini
-            section=Credentials
-            option=bucket
-            value={{ S3_BUCKET }}
+- name: create S3 configuration
+  template:
+    src: config/s3.ini
+    dest: /home/ubuntu/.s3.ini
 
 - name: backup requirements
-  pip: name=requests version=2.11.1 virtualenv=/home/ubuntu/backup_env
+  pip:
+    name: requests
+    version: 2.11.1
+    virtualenv: /home/ubuntu/backup_env
 
 - name: backup boto
-  pip: name=boto version=2.36.0 virtualenv=/home/ubuntu/backup_env
+  pip:
+    name: boto
+    version: 2.36.0
+    virtualenv: /home/ubuntu/backup_env
 
 - name: copy backup script
   template:
@@ -52,13 +31,30 @@
     owner: ubuntu
 
 - name: copy Python S3 uploader
-  copy: src=scripts/upload.py dest=/home/ubuntu/upload.py mode=0644 owner=ubuntu
+  copy:
+    src: scripts/upload.py
+    dest: /home/ubuntu/upload.py
+    mode: 0644
+    owner: ubuntu
 
 - name: copy restore script
-  copy: src=scripts/restore.sh dest=/home/ubuntu/restore.sh mode=0744 owner=ubuntu
+  copy:
+    src: scripts/restore.sh
+    dest: /home/ubuntu/restore.sh
+    mode: 0744
+    owner: ubuntu
 
 - name: copy Python S3 downloader
-  copy: src=scripts/download.py dest=/home/ubuntu/download.py mode=0644 owner=ubuntu
+  copy:
+    src: scripts/download.py
+    dest: /home/ubuntu/download.py
+    mode: 0644
+    owner: ubuntu
 
 - name: configure CRON
-  cron: name="run backup" hour="1" minute="1" user="ubuntu" job="/home/ubuntu/backup_env/bin/python /home/ubuntu/backup.py"
+  cron:
+    name: "run backup"
+    hour: "1"
+    minute: "1"
+    user: "ubuntu"
+    job: "/home/ubuntu/backup_env/bin/python /home/ubuntu/backup.py"
