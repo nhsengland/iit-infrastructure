@@ -14,7 +14,7 @@ restore_dir="$USER_HOME/restored"
 
 # Download from S3
 cd "$USER_HOME" || (echo "failed to cd into user home" && exit 1)
-python download.py "$1"
+"$USER_HOME/backup_env/bin/python" download.py "$1"
 echo "Downloaded backup"
 
 # Untar/gunzip it
