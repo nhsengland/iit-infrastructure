@@ -16,6 +16,12 @@
   roles:
     - common
 
+- name: install and configure Postgres
+  user: ubuntu
+  hosts: dbservers
+  roles:
+    - database
+
 - name: install and configure SOLR
   become: true
   user: ubuntu
@@ -30,26 +36,12 @@
   roles:
     - apache
 
-- name: install and configure Postgres
-  become: true
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - db
-
 - name: install CKAN
   become: true
   user: ubuntu
   hosts: webservers
   roles:
     - ckan
-
-- name: install and configure DataStore
-  become: true
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - datastore
 
 - name: install and configure DataPusher
   become: true

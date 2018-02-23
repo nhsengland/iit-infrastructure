@@ -1,0 +1,53 @@
+---
+# This playbook installs and (re)configures Postgres
+
+- name: install Postgres, its headers, and psycopg2
+  become: true
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+    update_cache: true
+  with_items:
+    - postgresql
+    - postgresql-server-dev-9.5
+    - python-psycopg2
+
+- name: add ckan_default database user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    role_attr_flags: CREATEDB
+
+- name: create ckan_default database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    encoding: 'UTF-8'
+    owner: "{{ db_user }}"
+    template: template0
+
+- name: create DataStore database
+  become: true
+  become_user: postgres
+  postgresql_db:
+    name: "{{ datastore_db }}"
+    owner: "{{ db_user }}"
+
+- name: set DataStore database owner
+  become: true
+  become_user: postgres
+  postgresql_user:
+    db: "{{ datastore_db }}"
+    name: "{{ db_user }}"
+    password: "{{ db_password }}"
+    priv: ALL
+
+- name: create DataStore database user
+  become: true
+  become_user: postgres
+  postgresql_user:
+    name: "{{ datastore_db_user }}"
+    password: "{{ datastore_db_password }}"
