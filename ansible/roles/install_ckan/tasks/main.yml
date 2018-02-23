@@ -1,8 +1,10 @@
 ---
-# This playbook sets installs the CKAN application.
+# This playbook installs CKAN
 
-# TODO: swap the following (except the pylibmc block) out for the old deb
-# install when CKAN release a 16.04 compatible version.
+- name: install packages
+  apt:
+    name: acl
+    state: installed
 
 - name: create CKAN lib directory
   become: true
@@ -48,11 +50,13 @@
     virtualenv: /usr/lib/ckan/default
 
 - name: Add WSGI file
+  become: true
   template:
     src: config/apache.wsgi
     dest: /etc/ckan/default/apache.wsgi
 
 - name: link who.ini
+  become: true
   file:
     src: /usr/lib/ckan/default/src/ckan/who.ini
     dest: /etc/ckan/default/who.ini
@@ -66,12 +70,43 @@
     virtualenv: /usr/lib/ckan/default
 
 - name: remove existing Solr schema.xml
+  become: true
   file:
     path: /etc/solr/conf/schema.xml
     state: absent
 
 - name: link SOLR schema.xml from Ckan
+  become: true
   file:
     src: /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml
     dest: /etc/solr/conf/schema.xml
     state: link
+
+- name: add production settings
+  become: true
+  template:
+    src: config/prod_settings.ini
+    dest: /etc/ckan/default/production.ini
+
+- name: Ensure FileStore directory exists
+  become: true
+  file:
+    path: /var/lib/ckan/default
+    owner: www-data
+    state: directory
+
+- name: Ensure Apache can write to FileStore directory
+  become: true
+  acl:
+    name: /var/lib/ckan/default
+    entity: www-data
+    etype: user
+    permissions: u+rwx
+
+- name: Ensure Ubuntu user can write to FileStore directory
+  become: true
+  acl:
+    name: /var/lib/ckan/default
+    entity: ubuntu
+    etype: user
+    permissions: u+rwx

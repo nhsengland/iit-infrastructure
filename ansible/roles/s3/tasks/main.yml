@@ -1,4 +1,0 @@
----
-# This playbook configures S3 backups.
-- name: Ensure Ubuntu user can write to FileStore directory
-  acl: name=/var/lib/ckan/default entity=ubuntu etype=user permissions=u+rwx

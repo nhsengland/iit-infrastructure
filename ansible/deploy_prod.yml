@@ -34,40 +34,14 @@
   roles:
     - webservers
 
-- name: install CKAN
-  become: true
+- name: install and configure CKAN
   user: ubuntu
   hosts: webservers
   roles:
-    - ckan
-
-- name: install and configure DataPusher
-  become: true
-  user: ubuntu
-  hosts: webservers
-  roles:
+    - install_ckan
+    - plugins
     - datapusher
-
-- name: install and configure FileStore
-  become: true
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - filestore
-
-- name: install plugin
-  become: true
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - plugin
-
-- name: install adfs
-  become: true
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - adfs
+    - configure_ckan
 
 - name: configure email
   become: true
@@ -75,27 +49,6 @@
   hosts: webservers
   roles:
     - email
-
-- name: configure S3 filestore
-  become: true
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - s3
-
-- name: configure ckan
-  become: true
-  user: ubuntu
-  hosts: webservers
-  tasks:
-      - name: configure our CKAN instance
-        template: src=config/prod_settings.ini dest=/etc/ckan/default/production.ini
-
-      - name: initialise the database
-        command: /usr/lib/ckan/default/bin/paster --plugin=ckan db init -c /etc/ckan/default/production.ini
-
-      - name: Set DataStore database permissions
-        command: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/production.ini postgres
 
 - name: deploy data directory
   user: ubuntu

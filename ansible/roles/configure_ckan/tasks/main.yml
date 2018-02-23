@@ -1,0 +1,8 @@
+---
+# This playbook configures CKAN
+
+- name: initialise the database
+  command: /usr/lib/ckan/default/bin/paster --plugin=ckan db init -c /etc/ckan/default/production.ini
+
+- name: Set DataStore database permissions
+  command: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/production.ini postgres

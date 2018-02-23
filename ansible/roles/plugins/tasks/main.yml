@@ -3,17 +3,31 @@
 # CKAN's configuration is correct.
 
 - name: install packages for repos
-  apt: pkg={{ item }} state=installed
+  become: true
+  apt:
+    pkg: "{{ item }}"
+    state: installed
   with_items:
-    - git
+    - libssl-dev
     - libxml2
     - libxml2-dev
-    - libxslt1.1
     - libxslt1-dev
+    - libxslt1.1
     - openssl
-    - libssl-dev
     - swig
-    - python-dev
+
+- name: clone ckanext-nhsengland git repository
+  become: true
+  become_user: ubuntu
+  git:
+    repo: "{{ git_protocol }}{{ git_repos_nhse }}"
+    dest: /home/ubuntu/ckanext-nhsengland
+    version: upgrade-ckan
+
+- name: run setup.py for nhsengland plugin
+  become: true
+  become_user: ubuntu
+  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
 
 - name: clone ckanext-adfs git repository
   become: true
@@ -28,4 +42,6 @@
   command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-adfs
 
 - name: download the FederationMetadata.xml file
-  get_url: url={{ ADFS_METADATA_URL }} dest={{ ADFS_FEDERATION_METADATA_PATH }}
+  get_url:
+    url: "{{ ADFS_METADATA_URL }}"
+    dest: "{{ ADFS_FEDERATION_METADATA_PATH }}"
