@@ -2,28 +2,19 @@
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
 
+- name: Install Python 2 and modernise packaging tools
+  gather_facts: false
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - python
+
 - name: Install common packages
   become: true
   user: ubuntu
   hosts: webservers
   roles:
     - common
-
-- name: "Bootstrap Python 2"
-  become: true
-  hosts: all
-  gather_facts: false
-  user: ubuntu
-  tasks:
-    - name: Install Python 2
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-
-- name: Modernise pip
-  become: true
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - pip
 
 - name: install and configure SOLR
   become: true

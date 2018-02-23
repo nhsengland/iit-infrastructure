@@ -1,4 +1,10 @@
 ---
+# This role installs a current python 2 and modern packaging tools
+
+- name: "Bootstrap Python 2"
+  become: true
+  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
 - name: Remove outdated system packaged pip
   become: true
   apt:
