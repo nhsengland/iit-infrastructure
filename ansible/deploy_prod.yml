@@ -97,12 +97,6 @@
       - name: Set DataStore database permissions
         command: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions -c /etc/ckan/default/production.ini postgres
 
-      - name: restart Apache
-        service: name=apache2 state=restarted
-
-      - name: restart Nginx
-        service: name=nginx state=restarted
-
 - name: deploy data directory
   user: ubuntu
   hosts: webservers
@@ -115,3 +109,23 @@
   hosts: dbservers
   roles:
     - backup
+
+- name: restart services
+  become: true
+  user: ubuntu
+  hosts: webservers
+  tasks:
+    - name: restart Jetty
+      service:
+        name: jetty8
+        state: restarted
+
+    - name: restart Apache
+      service:
+        name: apache2
+        state: restarted
+
+    - name: restart Nginx
+      service:
+        name: nginx
+        state: restarted

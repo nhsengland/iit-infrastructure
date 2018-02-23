@@ -75,4 +75,3 @@
     src: /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml
     dest: /etc/solr/conf/schema.xml
     state: link
-  notify: Restart Jetty
