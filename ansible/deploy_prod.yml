@@ -44,7 +44,6 @@
     - configure_ckan
 
 - name: configure email
-  become: true
   user: ubuntu
   hosts: webservers
   roles:
