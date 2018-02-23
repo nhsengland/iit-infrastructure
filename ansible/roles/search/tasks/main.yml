@@ -1,0 +1,49 @@
+---
+# This role sets the tools used for search
+
+- name: install search tools
+  become: true
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+    update_cache: yes
+  with_items:
+    - openjdk-8-jdk
+    - redis-server
+    - solr-jetty
+
+- name: update SOLR configuration - NO_START
+  become: true
+  lineinfile:
+    dest: /etc/default/jetty8
+    regexp: ^NO_START
+    line: "NO_START=0"
+
+- name: update SOLR configuration - JETTY_HOST
+  become: true
+  lineinfile:
+    dest: /etc/default/jetty8
+    regexp: ^JETTY_HOST
+    line: "JETTY_HOST={{ solr_host }}"
+
+- name: update SOLR configuration - JETTY_PORT
+  become: true
+  lineinfile:
+    dest: /etc/default/jetty8
+    regexp: ^JETTY_PORT
+    line: "JETTY_PORT={{ solr_port }}"
+
+- name: update SOLR configuration - JAVA_HOME
+  become: true
+  lineinfile:
+    dest: /etc/default/jetty8
+    regexp: JAVA_HOME
+    line: "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"
+
+- name: copy solrconfig.xml
+  become: true
+  template:
+    src: config/solrconfig.xml
+    dest: /etc/solr/conf/solrconfig.xml
+    mode: 644
+    owner: root

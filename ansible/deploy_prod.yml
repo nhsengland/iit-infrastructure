@@ -23,11 +23,10 @@
     - database
 
 - name: install and configure SOLR
-  become: true
   user: ubuntu
-  hosts: solr
+  hosts: search
   roles:
-    - solr
+    - search
 
 - name: install Apache
   become: true
