@@ -1,73 +1,75 @@
 #!/usr/bin/env python
-import subprocess
+
+import glob
 import os
-import socket
-from datetime import datetime
 import shutil
-import upload
+import socket
+import subprocess
+from datetime import datetime
+
 import requests
-EMAIL_ON_SUCCESS = True
+import upload
 
 
 def send_email(subject, text):
     return requests.post(
-        "{{ SUPPORT_EMAIL_END_POINT }}",
-        auth=("api", "{{ SUPPORT_EMAIL_API_KEY }}"),
+        '{{ SUPPORT_EMAIL_END_POINT }}',
+        auth=('api', '{{ SUPPORT_EMAIL_API_KEY }}'),
         data={
-            "from": "{{ SUPPORT_EMAIL_FROM }}",
-            "to": ["{{ SUPPORT_EMAIL_TO }}"],
-            "subject": subject,
-            "text": text
+            'from': '{{ SUPPORT_EMAIL_FROM }}',
+            'to': ['{{ SUPPORT_EMAIL_TO }}'],
+            'subject': subject,
+            'text': text
         }
     )
 
 
+def dump_database(backup_dir, database):
+    print('Dumping database: {}'.format(database))
+    target = os.path.join(backup_dir, '{}.dump'.format(database))
+    command = 'sudo -u postgres pg_dump --format=custom {}'.format(database)
+    print('Running: {}'.format(command))
+    with open(target, 'wb') as out:
+        subprocess.Popen(command, stdout=out, shell=True)
+
+    if not os.path.exists(target):
+        raise Exception('Database dump not saved for: {}'.format(database))
+
+
 def backup():
-    try:
-        hostname = socket.gethostname()
-        user_home = os.path.expanduser("~")
-        date = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        file_name = "{0}-{1}.tgz".format(date, hostname)
-        backup_dir = os.path.join(user_home, "backup")
-        backup_target = os.path.join(user_home, file_name)
+    user_home = os.path.expanduser('~')
+    hostname = socket.gethostname()
+    date = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    file_name = '{}-{}.tgz'.format(date, hostname)
+    backup_dir = os.path.join(user_home, 'backup')
+    backup_target = os.path.join(user_home, file_name)
 
-        if os.path.exists(backup_dir):
-            shutil.rmtree(backup_dir)
-        os.makedirs(backup_dir)
-        print 'makeing {}'.format(backup_dir)
+    if os.path.exists(backup_dir):
+        shutil.rmtree(backup_dir)
+    os.makedirs(backup_dir)
+    print('Created {}'.format(backup_dir))
 
-        for f in os.listdir(user_home):
-            if f.endswith("tgz"):
-                os.remove(os.path.join(user_home, f))
-        print "dumping ckan metadata data"
-        print os.stat("/usr/lib/ckan/default/bin/paster")
-        backup_ckan_metadata_cmd = '/usr/lib/ckan/default/bin/paster --plugin=ckan db dump -c /etc/ckan/default/production.ini {}'
-        backup_ckan_metadata_cmd = backup_ckan_metadata_cmd.format(os.path.join(backup_dir, "ckan_default.sql"))
-        print "running {}".format(backup_ckan_metadata_cmd)
-        subprocess.check_call(backup_ckan_metadata_cmd, shell=True)
+    for f in glob.iglob(os.path.join(user_home, '*.tgz')):
+        os.remove(f)
+    print('Removed tarballs')
 
-        print "dumping datastore data"
-        datastore_target_dir = '{}/datastore_default.dump'.format(backup_dir)
-        backup_datastore_cmd = 'sudo -u postgres pg_dump -Fc datastore_default > {}'
-        backup_datastore_cmd = backup_datastore_cmd.format(datastore_target_dir)
-        print "running {}".format(backup_datastore_cmd)
-        subprocess.check_call(backup_datastore_cmd, shell=True)
+    dump_database(backup_dir, 'ckan_default')
+    dump_database(backup_dir, 'datastore_default')
 
-        if not os.path.exists(datastore_target_dir):
-            raise ValueError("Datastore dump not saved")
+    shutil.copytree('/var/lib/ckan/default', os.path.join(backup_dir, 'default'))
 
-        print "tar-ing data"
-        #shutil.copytree("/var/lib/ckan/default", "{}/default".format(backup_dir))
-        os.system('cp -r /var/lib/ckan/default {}/default'.format(backup_dir))
+    print('Building tarball')
+    subprocess.check_call('tar czf {} --directory={} .'.format(backup_target, backup_dir), shell=True)
 
-        subprocess.check_call("tar cfz {0} {1}".format(backup_target, backup_dir), shell=True)
+    print('Uploading tarball')
+    upload.upload(backup_target)
 
-        print "uploading data"
-        upload.upload(backup_target)
-    except Exception as es:
-        print "errorred with {}".format(str(es))
-        send_email("Issue with the nhs england back up", str(es))
+    shutil.rmtree(os.path.join(backup_dir, 'default'))
 
 
 if __name__ == '__main__':
-    backup()
+    try:
+        backup()
+    except Exception as e:
+        print('errored with {}'.format(str(e)))
+        send_email('Issue with the nhs england back up', str(e))
