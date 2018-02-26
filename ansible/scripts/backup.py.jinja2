@@ -30,7 +30,7 @@ def dump_database(backup_dir, database):
     command = 'sudo -u postgres pg_dump --format=custom {}'.format(database)
     print('Running: {}'.format(command))
     with open(target, 'wb') as out:
-        subprocess.Popen(command, stdout=out, shell=True)
+        subprocess.check_call(command, stdout=out, shell=True)
 
     if not os.path.exists(target):
         raise Exception('Database dump not saved for: {}'.format(database))
