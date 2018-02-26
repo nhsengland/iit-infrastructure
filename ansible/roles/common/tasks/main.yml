@@ -19,6 +19,7 @@
     - memcached
     - python-dev
     - python-virtualenv
+    - redis-server
     - screen
     - tree
     - vim
