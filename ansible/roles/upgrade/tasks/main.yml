@@ -17,6 +17,9 @@
     state: present
     update_cache: yes
 
+# The Board Report dataset has a CSV resource that doesn't have its `format`
+# field filled in.  This meant no data views were created for the resource.
+# This resolves that problem by fixing the offending resource row in the db.
 - name: update board_report dataset
   become: true
   become_user: postgres
