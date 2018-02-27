@@ -21,7 +21,7 @@
   git:
     repo: "{{ git_protocol }}{{ git_repos_nhse }}"
     dest: /home/ubuntu/ckanext-nhsengland
-    version: reskin-nhs-england
+    version: upgrade-ckan
 
 - name: run setup.py for nhsengland plugin
   become: true
