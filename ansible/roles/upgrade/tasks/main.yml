@@ -1,0 +1,84 @@
+---
+- include_tasks: looped_tasks.yml
+  with_items:
+    - 2.3.5
+    - 2.4.9
+    - 2.5.7
+    - 2.6.4
+    - 2.7.2
+
+  loop_control:
+    loop_var: version
+
+- name: install redis server
+  become: true
+  apt:
+    name: redis-server
+    state: present
+    update_cache: yes
+
+# The Board Report dataset has a CSV resource that doesn't have its `format`
+# field filled in.  This meant no data views were created for the resource.
+# This resolves that problem by fixing the offending resource row in the db.
+- name: update board_report dataset
+  become: true
+  become_user: postgres
+  command: psql ckan_default -c "UPDATE resource SET format = 'CSV' WHERE package_id = '2c5c458b-8a2f-4319-bd6a-58fd00b70e74';"
+
+- name: "rename *_preview -> *_view in production.ini"
+  become: true
+  ini_file:
+    path: /etc/ckan/default/production.ini
+    section: "app:main"
+    option: ckan.plugins
+    value: stats text_view recline_view nhsengland_skin datastore datapusher adfs
+    backup: yes
+
+- name: add default views setting to production.ini
+  become: true
+  ini_file:
+    path: /etc/ckan/default/production.ini
+    section: "app:main"
+    option: ckan.views.default_views
+    value: recline_view
+    backup: yes
+
+- name: add default views setting to production.ini
+  become: true
+  ini_file:
+    path: /etc/ckan/default/production.ini
+    section: "app:main"
+    option: ckan.site_url
+    value: "http://{{ inventory_hostname }}"
+    backup: yes
+
+- name: restart jetty
+  become: true
+  service:
+    name: jetty8
+    state: restarted
+
+- name: rebuild Solr schema
+  become: true
+  command: /usr/lib/ckan/default/bin/paster --plugin=ckan search-index rebuild --config /etc/ckan/default/production.ini
+
+- name: create views
+  become: true
+  command: /usr/lib/ckan/default/bin/paster --plugin=ckan views create -y --config=/etc/ckan/default/production.ini
+
+- name: upgrade requests
+  become: true
+  become_user: ubuntu
+  pip:
+    name: requests[security]
+    virtualenv: /usr/lib/ckan/default
+
+- name: update datastore permissions
+  become: true
+  shell: /usr/lib/ckan/default/bin/paster --plugin=ckan datastore set-permissions --config=/etc/ckan/default/production.ini | sudo -u postgres psql --set ON_ERROR_STOP=1
+
+- name: restart apache
+  become: true
+  service:
+    name: apache2
+    state: restarted

@@ -1,0 +1,13 @@
+---
+# This playbook upgrades NHS Englands CKAN instance from 2.2 -> 2.7.  It does a
+# source install for each version up to 2.7 to upgrade the database schema for
+# each major version bump.  Then it moves the install to the Ubuntu 16.04
+# compatible deb install.
+
+- name: "Upgrade CKAN from 2.2 -> 2.7"
+  hosts: webservers
+  user: ubuntu
+  roles:
+    - upgrade
+
+# - name: "Switch to 2.7 deb"
