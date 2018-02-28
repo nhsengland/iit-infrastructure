@@ -53,23 +53,27 @@
     name: nginx
     state: installed
 
-- name: copy SSL certificate to correct location
+- name: add Launchpad's key ID
   become: true
-  copy:
-    src: config/data.england.nhs.uk.crt
-    dest: /etc/ssl/data.england.nhs.uk.crt
-    owner: root
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 14aa40ec0831756756d7f66c4f4ea0aae5267a6c
 
-- name: copy SSL key to correct location
+- name: add certbot PPA
   become: true
-  copy:
-    src: config/data.england.nhs.uk.key_secure
-    dest: /etc/ssl/data.england.nhs.uk.key_secure
-    owner: root
+  apt_repository:
+    repo: 'ppa:certbot/certbot'
+    update_cache: true
 
-- name: decrypt SSL certificate
+- name: install certbot
   become: true
-  command: openssl rsa -in /etc/ssl/data.england.nhs.uk.key_secure -out /etc/ssl/data.england.nhs.uk.key -passin pass:{{ssl_passphrase}}
+  apt:
+    pkg: python-certbot-nginx
+    state: installed
+
+- name: generate cert with Lets Encrypt
+  become: true
+  command: certbot certonly --nginx -n -d data.england.nhs.uk --agree-tos -m support@openhealthcare.org.uk
 
 - name: copy nginx config
   become: true
