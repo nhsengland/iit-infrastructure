@@ -3,17 +3,17 @@ proxy_temp_path /tmp/nginx_proxy 1 2;
 
 server {
     listen 80 default;
-    server_name data.england.nhs.uk;
+    server_name {{ domain }};
     rewrite ^ https://$server_name$request_uri? permanent;
 }
 
 server {
     listen 443 ssl;
-    server_name data.england.nhs.uk;
+    server_name {{ domain }};
 
     ssl on;
-    ssl_certificate      /etc/letsencrypt/live/data.england.nhs.uk/fullchain.pem;
-    ssl_certificate_key  /etc/letsencrypt/live/data.england.nhs.uk/privkey.pem;
+    ssl_certificate      /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
+    ssl_certificate_key  /etc/letsencrypt/live/{{ domain }}/privkey.pem;
     include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
     ssl_session_cache    shared:SSL:10m;

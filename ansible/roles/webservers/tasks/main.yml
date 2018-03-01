@@ -73,11 +73,11 @@
 
 - name: generate cert with Lets Encrypt
   become: true
-  command: certbot certonly --nginx -n -d data.england.nhs.uk --agree-tos -m support@openhealthcare.org.uk
+  command: "certbot certonly --nginx -n -d {{ domain }} --agree-tos -m support@openhealthcare.org.uk"
 
 - name: copy nginx config
   become: true
-  copy:
+  template:
     src: config/nginx_ckan
     dest: /etc/nginx/sites-available/ckan
     mode: 0644
