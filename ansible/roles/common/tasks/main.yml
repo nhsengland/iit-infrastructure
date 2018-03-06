@@ -1,0 +1,25 @@
+---
+# This role sets up lots of common packages used generally.
+
+- name: install packages for CKAN
+  become: true
+  apt:
+      pkg: "{{ item }}"
+      state: installed
+      update_cache: true
+  with_items:
+    - ack-grep
+    - build-essential
+    - emacs
+    - git
+    - htop
+    - iotop
+    - libmemcached-dev
+    - libpq5
+    - memcached
+    - python-dev
+    - python-virtualenv
+    - screen
+    - tree
+    - vim
+    - zip

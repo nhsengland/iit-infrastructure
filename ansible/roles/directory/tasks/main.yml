@@ -1,12 +1,6 @@
 ---
 # This playbook installs the data directory
 
-- name: install git
-  become: true
-  apt:
-    pkg: git
-    state: installed
-
 - name: add Launchpad's key ID
   become: true
   apt_key:
@@ -20,10 +14,12 @@
 
 - name: install packages for repos
   become: true
-  apt: pkg={{ item }} state=installed
+  apt:
+    pkg: "{{ item }}"
+    state: installed
   with_items:
-    - php5.6
     - libapache2-mod-php5.6
+    - php5.6
     - php5.6-curl
 
 - name: clone git repository
@@ -33,10 +29,6 @@
     repo: '{{ git_protocol }}github.com/nhsengland/datadirectory'
     dest: /home/ubuntu/datadirectory
     version: master
-
-- name: restart Apache
-  become: true
-  service: name=apache2 state=restarted
 
 - name: delete nginx cache
   become: true

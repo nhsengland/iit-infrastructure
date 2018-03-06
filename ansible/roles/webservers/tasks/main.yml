@@ -1,0 +1,93 @@
+---
+# This role installs and configures Apache and Nginx
+
+- name: install Apache and Nginx configure Apache
+  become: true
+  apt:
+    pkg: "{{ item }}"
+    state: installed
+  with_items:
+    - apache2
+    - libapache2-mod-rpaf
+    - libapache2-mod-wsgi
+
+- name: remove default Apache site
+  become: true
+  file:
+    path: /etc/apache2/sites-enabled/000-default.conf
+    state: absent
+
+- name: Apache listen on port 8080
+  become: true
+  lineinfile:
+    dest: /etc/apache2/ports.conf
+    regexp: "^Listen 80"
+    line: "Listen 8080"
+    state: present
+
+- name: copy Apache vhost configuration
+  become: true
+  template:
+    src: config/apache2_ckan_default
+    dest: /etc/apache2/sites-available/ckan_default.conf
+    mode: 664
+    owner: root
+
+- name: enable Apache vhost
+  become: true
+  file:
+    src: /etc/apache2/sites-available/ckan_default.conf
+    dest: /etc/apache2/sites-enabled/ckan_default.conf
+    state: link
+
+- name: restart Apache
+  become: true
+  service:
+    name: apache2
+    state: restarted
+
+# Must happen after apache is configured
+- name: install Nginx
+  become: true
+  apt:
+    name: nginx
+    state: installed
+
+- name: copy SSL certificate to correct location
+  become: true
+  copy:
+    src: config/data.england.nhs.uk.crt
+    dest: /etc/ssl/data.england.nhs.uk.crt
+    owner: root
+
+- name: copy SSL key to correct location
+  become: true
+  copy:
+    src: config/data.england.nhs.uk.key_secure
+    dest: /etc/ssl/data.england.nhs.uk.key_secure
+    owner: root
+
+- name: decrypt SSL certificate
+  become: true
+  command: openssl rsa -in /etc/ssl/data.england.nhs.uk.key_secure -out /etc/ssl/data.england.nhs.uk.key -passin pass:{{ssl_passphrase}}
+
+- name: copy nginx config
+  become: true
+  copy:
+    src: config/nginx_ckan
+    dest: /etc/nginx/sites-available/ckan
+    mode: 0644
+    owner: root
+
+- name: deactivate default nginx site
+  become: true
+  file:
+    name: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: activate ckan nginx site
+  become: true
+  file:
+    src: /etc/nginx/sites-available/ckan
+    dest: /etc/nginx/sites-enabled/ckan
+    state: link

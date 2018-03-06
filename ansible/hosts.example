@@ -4,5 +4,5 @@ ec2-11-111-111-111.us-west-2.compute.amazonaws.com
 [dbservers]
 ec2-11-111-111-111.us-west-2.compute.amazonaws.com
 
-[solr]
+[search]
 ec2-11-111-111-111.us-west-2.compute.amazonaws.com
