@@ -38,9 +38,9 @@ echo "Upgraded database schema"
 
 sudo /usr/lib/ckan/default/bin/paster --plugin=ckan db clean --config=/etc/ckan/default/production.ini
 
-sudo --user=postgres pg_restore --dbname="ckan_default" --clean --if-exists "$restore_dir/ckan_default.dump"
+sudo --user=postgres pg_restore --dbname="ckan_default" --clean --if-exists --jobs="$(nproc --all)" "$restore_dir/ckan_default.dump"
 echo "Restored database: ckan_default"
-sudo --user=postgres pg_restore --dbname="datastore_default" --clean --if-exists "$restore_dir/datastore_default.dump"
+sudo --user=postgres pg_restore --dbname="datastore_default" --clean --if-exists --jobs="$(nproc --all)" "$restore_dir/datastore_default.dump"
 echo "Restored database: datastore_default"
 
 # Copy the filestore directory into the backup directory.

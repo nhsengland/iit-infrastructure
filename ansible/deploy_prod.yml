@@ -40,7 +40,6 @@
   roles:
     - install_ckan
     - plugins
-    - datapusher
     - configure_ckan
 
 - name: configure email

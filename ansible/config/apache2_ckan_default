@@ -1,8 +1,8 @@
 WSGISocketPrefix /var/run/wsgi
 <VirtualHost 127.0.0.1:8080>
 
-    ServerName data.england.nhs.uk
-    ServerAlias www.data.england.nhs.uk
+    ServerName {{ domain }}
+    ServerAlias www.{{ domain }}
 
 
     AliasMatch "^/datadirectory/[0-9]+/[0-9]+/[0-9]+/(.*).html$" "/home/ubuntu/datadirectory/_site/$1/index.html"

@@ -37,7 +37,7 @@ Make sure you have the Ansible vault password in the .vault.txt file (available 
 
 Simply run the following command in this directory and "it should just work" (tm) to install a test instance::
 
-    ansible-playbook hosts deploy_test.yml --vault-password-file .vault.txt
+    ansible-playbook hosts deploy_test.yml --vault-password-file .vault.txt --extra-vars "domain=real.domain.com"
 
 This brings up an empty "basic" CKAN instance with NHSEngland branding.
 
