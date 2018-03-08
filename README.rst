@@ -8,7 +8,7 @@ Deployment
 
 Ansible is your friend. See ./ansible .
 
-(We're assuming you're deploying to the recommended Ubuntu 12.04 release on AWS as the ubuntu user.)
+(We're assuming you're deploying to the recommended Ubuntu 16.04 release on AWS as the ubuntu user.)
 
 Localization && Internationalization
 ------------------------------------

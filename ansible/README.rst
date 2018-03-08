@@ -109,3 +109,17 @@ The restore process is very simple:
 * SSH into the new box that you want to restore the data to.
 * As the ubuntu user run the restore script: ``restore.sh KEYNAME`` where KEYNAME is the name of the key you looked up earlier (e.g. ``restore.sh ip-172-31-14-177``)
 * This script will grab the backup from S3, unzip it, stop Apache, restart Postgres (so pg_restore is not blocked by existing connections), use CKAN's blessed paster commands to clean then restore the main database (see http://docs.ckan.org/en/latest/maintaining/paster.html#dumping-and-loading-databases-to-from-a-file), use pg_restore to restore the datastore database (this may produce some errors that are safe to ignore), copy the filestore files back into the correct location and kick off a reindex by SOLR.
+
+Recreating a Production Instance
+--------------------------------
+Since `deploy_prod.yml` creates a server with a valid TLS certificate (via Lets Encrypt) it's necessary to provide a publicly accessible domain name.
+It's unlikely this is going to be the production FQDN since you'll want to test your new instance before you flip over to it.
+When it comes time to convert your new instance to the new production machine there are a couple of tasks you need to:
+* Update the FQDN in `/etc/ckan/default/production.ini`, `/etc/apache2/sites-enabled/ckan_default.conf`, and `/etc/nginx/sites-enabled/ckan`
+* Comment out the SSL sections of `/etc/nginx/sites-enabled/ckan` (so certbot can use Nginx to tell Lets Encrypt you have control of `data.england.nhs.uk`)
+* Restart Apache and Nginx with `sudo systemctl restart apache2.service nginx.service`
+* Point the production Elastic IP to your new instance (this will change it's public hostname as well, so you'll likely have to reconnect your SSH session)
+* Generate a new certificate with `certbot certonly --nginx -n -d data.england.nhs.uk --agree-tos -m support@openhealthcare.org.uk`
+* Uncomment the SSL lines you commented out in `/etc/nginx/sites-enabled/ckan`
+* Restart nginx with `sudo systemctl restart nginx.service`
+* Reindex CKAN's search index with `/usr/lib/ckan/default/bin/paster --plugin=ckan search-index rebuild --config /etc/ckan/default/production.ini`
