@@ -23,14 +23,14 @@
   become: true
   lineinfile:
     dest: /etc/default/jetty8
-    regexp: ^JETTY_HOST
+    regexp: ^#JETTY_HOST
     line: "JETTY_HOST={{ solr_host }}"
 
 - name: update SOLR configuration - JETTY_PORT
   become: true
   lineinfile:
     dest: /etc/default/jetty8
-    regexp: ^JETTY_PORT
+    regexp: ^#JETTY_PORT
     line: "JETTY_PORT={{ solr_port }}"
 
 - name: update SOLR configuration - JAVA_HOME

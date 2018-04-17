@@ -18,7 +18,6 @@ def get_package(session, base_url, name):
         print('Failed to find: {}'.format(name))
         print(resp.content)
         return None
-
     return resp.json()['result']
 
 
@@ -145,7 +144,7 @@ def run(url, token, datasets, tag):
     for name in datasets:
         name = name.decode('utf-8', 'ignore')
         package = search(session, url, name)
-        update_package(session, url, name, package)
+        update_package(session, url, package, name, tag)
 
     with open('dataset-ids.txt', 'r') as f:
         ids = list(d.strip() for d in f.readlines())
