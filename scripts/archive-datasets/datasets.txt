@@ -269,7 +269,7 @@ NHSOF - 1.14 Smoking status at time of delivery
 NHSOF - 1.4 Myocardial infarction, stroke and stage 5 kidney disease in people with diabetes
 NHSOF - 2.1 Health-related quality of life for people with long-term conditions
 NHSOF - 2.15 Health-related quality of life for carers
-NHSOF - 5.4 Incidence of Healthcare Associated Infection (HCAI) – C. difficile
+NHSOF - 5.4 Incidence of Healthcare Associated Infection (HCAI) - C. difficile
 NHSOF - 2.2 Proportion of people who are feeling supported to manage their condition
 NHSOF - 1.7 Under 75 mortality rates from liver disease
 NHSOF - 4.1 Patient experience of GP out-of-hours services

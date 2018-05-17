@@ -37,17 +37,17 @@ Make sure you have the Ansible vault password in the .vault.txt file (available 
 
 Simply run the following command in this directory and "it should just work" (tm) to install a test instance::
 
-    ansible-playbook hosts deploy_test.yml --vault-password-file .vault.txt --extra-vars "domain=real.domain.com"
+    ansible-playbook -i hosts deploy_test.yml --vault-password-file .vault.txt --extra-vars "domain=real.domain.com"
 
 This brings up an empty "basic" CKAN instance with NHSEngland branding.
 
 If you want to deploy a "full" production type instance with all the bells and whistles, you need to type::
 
-    ansible-playbook hosts deploy_prod.yml --vault-password-file .vault.txt
+    ansible-playbook -i hosts deploy_prod.yml --vault-password-file .vault.txt
 
 If you just want to deploy publish-o-matic then you need to run::
 
-    ansible-playbook hosts deploy_publishomatic.yml --vault-password-file .vault.txt
+    ansible-playbook -i hosts deploy_publishomatic.yml --vault-password-file .vault.txt
 
 Configuring publishomatic
 -------------------------
