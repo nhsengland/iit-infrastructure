@@ -6,3 +6,4 @@ tests/performance_tests/*/results
 *.pem
 .vault.txt
 *.log
+ansible/group_vars/*
