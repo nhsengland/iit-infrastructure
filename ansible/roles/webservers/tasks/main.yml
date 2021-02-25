@@ -4,12 +4,11 @@
 - name: install Apache and Nginx configure Apache
   become: true
   apt:
-    pkg: "{{ item }}"
     state: installed
-  with_items:
-    - apache2
-    - libapache2-mod-rpaf
-    - libapache2-mod-wsgi
+    pkg:
+      - apache2
+      - libapache2-mod-rpaf
+      - libapache2-mod-wsgi
 
 - name: remove default Apache site
   become: true

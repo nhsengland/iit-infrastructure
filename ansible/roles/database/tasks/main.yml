@@ -4,13 +4,12 @@
 - name: install Postgres, its headers, and psycopg2
   become: true
   apt:
-    pkg: "{{ item }}"
     state: installed
     update_cache: true
-  with_items:
-    - postgresql
-    - postgresql-server-dev-9.5
-    - python-psycopg2
+    pkg:
+      - postgresql
+      - postgresql-server-dev-9.5
+      - python-psycopg2
 
 - name: add ckan_default database user
   become: true

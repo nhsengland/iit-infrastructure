@@ -5,16 +5,15 @@
 - name: install packages for repos
   become: true
   apt:
-    pkg: "{{ item }}"
     state: installed
-  with_items:
-    - libssl-dev
-    - libxml2
-    - libxml2-dev
-    - libxslt1-dev
-    - libxslt1.1
-    - openssl
-    - swig
+    pkg:
+      - libssl-dev
+      - libxml2
+      - libxml2-dev
+      - libxslt1-dev
+      - libxslt1.1
+      - openssl
+      - swig
 
 - name: clone ckanext-nhsengland git repository
   become: true

@@ -79,8 +79,9 @@
   hosts: dbservers
   tasks:
     - name: install packages for backup
-      apt: pkg={{ item }} state=installed
-      with_items:
+      apt:
+        state: installed
+        pkg:
         - python-boto
 
     - name: create BOTO configuration

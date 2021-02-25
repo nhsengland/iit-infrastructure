@@ -4,13 +4,12 @@
 - name: install search tools
   become: true
   apt:
-    pkg: "{{ item }}"
     state: installed
     update_cache: yes
-  with_items:
-    - openjdk-8-jdk
-    - redis-server
-    - solr-jetty
+    pkg:
+      - openjdk-8-jdk
+      - redis-server
+      - solr-jetty
 
 - name: update SOLR configuration - NO_START
   become: true

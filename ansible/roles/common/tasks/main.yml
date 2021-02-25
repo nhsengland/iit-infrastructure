@@ -4,23 +4,22 @@
 - name: install packages for CKAN
   become: true
   apt:
-      pkg: "{{ item }}"
-      state: installed
-      update_cache: true
-  with_items:
-    - ack-grep
-    - build-essential
-    - emacs
-    - git
-    - htop
-    - iotop
-    - libmemcached-dev
-    - libpq5
-    - memcached
-    - python-dev
-    - python-virtualenv
-    - redis-server
-    - screen
-    - tree
-    - vim
-    - zip
+    state: installed
+    update_cache: true
+    pkg:
+      - ack-grep
+      - build-essential
+      - emacs
+      - git
+      - htop
+      - iotop
+      - libmemcached-dev
+      - libpq5
+      - memcached
+      - python-dev
+      - python-virtualenv
+      - redis-server
+      - screen
+      - tree
+      - vim
+      - zip

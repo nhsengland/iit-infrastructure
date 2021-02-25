@@ -5,19 +5,20 @@
   apt: update_cache=yes
 
 - name: install packages for repos
-  apt: pkg={{ item }} state=installed
   become: true
-  with_items:
-    - git
-    - libxml2
-    - libxml2-dev
-    - libxslt1.1
-    - libxslt1-dev
-    - openssl
-    - libssl-dev
-    - python-dev
-    - python-pip
-    - python-virtualenv
+  apt:
+    state: installed
+    pkg:
+      - git
+      - libxml2
+      - libxml2-dev
+      - libxslt1.1
+      - libxslt1-dev
+      - openssl
+      - libssl-dev
+      - python-dev
+      - python-pip
+      - python-virtualenv
 
 # Create logging folder and lograte entry
 - name: Creates logging directory

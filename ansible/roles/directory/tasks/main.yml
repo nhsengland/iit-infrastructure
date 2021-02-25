@@ -15,12 +15,11 @@
 - name: install packages for repos
   become: true
   apt:
-    pkg: "{{ item }}"
     state: installed
-  with_items:
-    - libapache2-mod-php5.6
-    - php5.6
-    - php5.6-curl
+    pkg:
+      - libapache2-mod-php5.6
+      - php5.6
+      - php5.6-curl
 
 - name: clone git repository
   become: true
