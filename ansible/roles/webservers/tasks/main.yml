@@ -5,7 +5,6 @@
   become: true
   apt:
     pkg: "{{ item }}"
-    state: installed
   with_items:
     - apache2
     - libapache2-mod-rpaf
@@ -51,7 +50,6 @@
   become: true
   apt:
     name: nginx
-    state: installed
 
 - name: add Launchpad's key ID
   become: true
@@ -69,11 +67,29 @@
   become: true
   apt:
     pkg: python-certbot-nginx
-    state: installed
+    state: present
 
 - name: generate cert with Lets Encrypt
   become: true
   command: "certbot certonly --nginx -n -d {{ domain }} --agree-tos -m support@openhealthcare.org.uk"
+
+- name: create project log directories
+  become: true
+  file:
+    name: "/var/log/{item}"
+    state: directory
+  with_items:
+    - ncdr
+    - udal
+
+- name: create project access logs
+  become: true
+  file:
+    name: "/var/log/{item}/access.log"
+    state: touch
+  with_items:
+    - ncdr
+    - udal
 
 - name: copy nginx config
   become: true
