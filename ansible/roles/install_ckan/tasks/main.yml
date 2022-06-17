@@ -2,9 +2,9 @@
 # This playbook installs CKAN
 
 - name: install packages
+  become: true
   apt:
     name: acl
-    state: installed
 
 - name: create CKAN lib directory
   become: true
@@ -24,7 +24,11 @@
 - name: create CKAN virtualenv
   become: true
   become_user: ubuntu
-  command: virtualenv /usr/lib/ckan/default
+  command: virtualenv /usr/lib/ckan/default --python /usr/bin/python2 --no-pip
+
+- name: Install pip
+  become: true
+  command: /usr/lib/ckan/default/bin/python /tmp/get-pip.py
 
 - name: install an older setuptools for CKAN
   become: true
@@ -41,6 +45,14 @@
     editable: true
     name: git+https://github.com/ckan/ckan.git@ckan-2.7.2#egg=ckan
     virtualenv: /usr/lib/ckan/default
+
+# to stop https://stackoverflow.com/questions/51118815/error-could-not-determine-postgresql-version-from-10-4
+- name: Bump ckan psycopg version
+  become: true
+  lineinfile:
+    dest: /usr/lib/ckan/default/src/ckan/requirements.txt
+    regexp: ^psycopg2==2.4.5
+    line: "psycopg2==2.8.6"
 
 - name: install CKAN python requirements
   become: true

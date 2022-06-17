@@ -5,7 +5,6 @@
   become: true
   apt:
       pkg: "{{ item }}"
-      state: installed
       update_cache: true
   with_items:
     - ack-grep
@@ -18,7 +17,7 @@
     - libpq5
     - memcached
     - python-dev
-    - python-virtualenv
+    - virtualenv
     - redis-server
     - screen
     - tree

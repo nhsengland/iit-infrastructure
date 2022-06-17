@@ -54,11 +54,11 @@
   roles:
     - directory
 
-- name: configure backup scripts
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - backup
+# - name: configure backup scripts
+#   user: ubuntu
+#   hosts: dbservers
+#   roles:
+#     - backup
 
 - name: restart services
   become: true
@@ -67,7 +67,7 @@
   tasks:
     - name: restart Jetty
       service:
-        name: jetty8
+        name: jetty9
         state: restarted
 
     - name: restart Apache

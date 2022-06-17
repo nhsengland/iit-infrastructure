@@ -37,13 +37,11 @@ server {
 
     location /ncdr/ {
         access_log  /var/log/nginx/access.log;
-        rewrite /ncdr/(.*) /$1 break;
         proxy_pass http://ec2-52-19-157-201.eu-west-1.compute.amazonaws.com;
     }
 
     location /udal/ {
         access_log  /var/log/nginx/access.log;
-        rewrite /udal/(.*) /$1 break;
         proxy_pass http://{{ UDAL_ADDRESS }};
     }
 

@@ -22,7 +22,7 @@
         - Restart Apache
 
     - name: Rollback to tag
-      git: repo={{ git_protocol }}{{ git_user }}:{{ git_password }}@{{ git_repos}}
+      git: repo=https://github.com/nhsengland/ckanext-nhsengland.git
            dest=/home/ubuntu/ckanext-nhsengland version={{ tag }}
       when: tag|default(None) != None
       notify:

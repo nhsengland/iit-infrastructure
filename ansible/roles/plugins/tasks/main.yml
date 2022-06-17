@@ -6,7 +6,6 @@
   become: true
   apt:
     pkg: "{{ item }}"
-    state: installed
   with_items:
     - libssl-dev
     - libxml2
@@ -26,7 +25,10 @@
 - name: run setup.py for nhsengland plugin
   become: true
   become_user: ubuntu
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
+  pip:
+    chdir: /home/ubuntu
+    name: ckanext-nhsengland
+    virtualenv: /usr/lib/ckan/default
 
 - name: clone ckanext-adfs git repository
   become: true
@@ -38,7 +40,10 @@
 - name: run setup.py for adfs plugin
   become: true
   become_user: ubuntu
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-adfs
+  pip:
+    chdir: /home/ubuntu
+    name: ckanext-adfs
+    virtualenv: /usr/lib/ckan/default
 
 - name: download the FederationMetadata.xml file
   get_url:

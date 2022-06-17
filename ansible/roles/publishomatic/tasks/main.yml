@@ -5,7 +5,7 @@
   apt: update_cache=yes
 
 - name: install packages for repos
-  apt: pkg={{ item }} state=installed
+  apt: pkg={{ item }}
   become: true
   with_items:
     - git

@@ -57,17 +57,11 @@
     keyserver: keyserver.ubuntu.com
     id: 14aa40ec0831756756d7f66c4f4ea0aae5267a6c
 
-- name: add certbot PPA
-  become: true
-  apt_repository:
-    repo: 'ppa:certbot/certbot'
-    update_cache: true
-
 - name: install certbot
   become: true
-  apt:
-    pkg: python-certbot-nginx
-    state: present
+  snap:
+    classic: true
+    name: certbot
 
 - name: generate cert with Lets Encrypt
   become: true

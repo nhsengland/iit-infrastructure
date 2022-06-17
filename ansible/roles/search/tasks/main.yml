@@ -5,7 +5,6 @@
   become: true
   apt:
     pkg: "{{ item }}"
-    state: installed
     update_cache: yes
   with_items:
     - openjdk-8-jdk
@@ -15,28 +14,42 @@
 - name: update SOLR configuration - NO_START
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
+    dest: /etc/default/jetty9
     regexp: ^NO_START
     line: "NO_START=0"
 
 - name: update SOLR configuration - JETTY_HOST
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
+    dest: /etc/default/jetty9
     regexp: ^JETTY_HOST
     line: "JETTY_HOST={{ solr_host }}"
 
 - name: update SOLR configuration - JETTY_PORT
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
+    dest: /etc/default/jetty9
     regexp: ^JETTY_PORT
     line: "JETTY_PORT={{ solr_port }}"
+
+- name: update jetty configuration - JETTY_HOST
+  become: true
+  lineinfile:
+    dest: /etc/jetty9/start.ini
+    regexp: ^#jetty.host=
+    line: "jetty.host={{ solr_host }}"
+
+- name: update jetty configuration - JETTY_PORT
+  become: true
+  lineinfile:
+    dest: /etc/jetty9/start.ini
+    regexp: ^jetty.port=
+    line: "jetty.port={{ solr_port }}"
 
 - name: update SOLR configuration - JAVA_HOME
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
+    dest: /etc/default/jetty9
     regexp: JAVA_HOME
     line: "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"
 

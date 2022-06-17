@@ -14,7 +14,6 @@
   become: true
   apt:
     name: redis-server
-    state: present
     update_cache: yes
 
 # The Board Report dataset has a CSV resource that doesn't have its `format`
@@ -55,7 +54,7 @@
 - name: restart jetty
   become: true
   service:
-    name: jetty8
+    name: jetty9
     state: restarted
 
 - name: rebuild Solr schema
