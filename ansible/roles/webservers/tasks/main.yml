@@ -63,9 +63,9 @@
     classic: true
     name: certbot
 
-- name: generate cert with Lets Encrypt
-  become: true
-  command: "certbot certonly --nginx -n -d {{ domain }} --agree-tos -m support@openhealthcare.org.uk"
+# - name: generate cert with Lets Encrypt
+#   become: true
+#   command: "certbot certonly --nginx -n -d {{ domain }} --agree-tos -m support@openhealthcare.org.uk"
 
 - name: create project log directories
   become: true
