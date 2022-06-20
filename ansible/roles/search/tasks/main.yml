@@ -11,6 +11,20 @@
     - redis-server
     - solr-jetty
 
+- name: update jetty configuration - JETTY_HOST
+  become: true
+  lineinfile:
+    dest: /etc/jetty9/start.ini
+    regexp: ^#jetty.host=
+    line: "jetty.host={{ solr_host }}"
+
+- name: update jetty configuration - JETTY_PORT
+  become: true
+  lineinfile:
+    dest: /etc/jetty9/start.ini
+    regexp: ^jetty.port=
+    line: "jetty.port={{ solr_port }}"
+
 - name: update SOLR configuration - NO_START
   become: true
   lineinfile:
