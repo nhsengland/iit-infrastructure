@@ -28,6 +28,7 @@
   pip:
     chdir: /home/ubuntu
     name: ckanext-nhsengland
+    editable: true
     virtualenv: /usr/lib/ckan/default
 
 - name: clone ckanext-adfs git repository
@@ -43,6 +44,7 @@
   pip:
     chdir: /home/ubuntu
     name: ckanext-adfs
+    editable: true
     virtualenv: /usr/lib/ckan/default
 
 - name: download the FederationMetadata.xml file
