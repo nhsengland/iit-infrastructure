@@ -14,11 +14,31 @@
     - libpq-dev
     - python-dev
 
+- name: Download pip installer
+  get_url:
+    url: https://bootstrap.pypa.io/pip/2.7/get-pip.py
+    dest: /tmp/get-pip.py
+    mode: 0440
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Install pip
+  become: true
+  become_user: postgres
+  command: /usr/bin/python2 /tmp/get-pip.py
+  args:
+    creates: /usr/local/bin/pip
+  vars:
+    ansible_ssh_pipelining: true
+
 - name: install psycopg2 from the binary
   become: true
+  become_user: postgres
   pip:
     executable: /usr/local/bin/pip
     name: psycopg2-binary
+  vars:
+    ansible_ssh_pipelining: true
 
 - name: add ckan_default database user
   become: true
