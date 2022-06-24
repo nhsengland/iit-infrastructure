@@ -1,11 +1,6 @@
 ---
 # This role installs a current python 2 and modern packaging tools
-
-- name: "Bootstrap Python 2"
-  become: true
-  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-
-- name: Remove outdated system packaged pip
+- name: Remove system packaged pip
   become: true
   apt:
     name: python-pip
@@ -13,21 +8,20 @@
 
 - name: Download pip installer
   get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
+    url: https://bootstrap.pypa.io/pip/2.7/get-pip.py
     dest: /tmp/get-pip.py
     mode: 0440
 
 - name: Install pip
-  become: true
   command: /usr/bin/python /tmp/get-pip.py
+  become: true
   args:
     creates: /usr/local/bin/pip
 
-- name: Ensure python package tools are up to date
+# we install it with pip as the apt-get package has
+# issues in the activate_this function used by wsgi.py
+- name: Install virtualenv
   become: true
   pip:
-    name: '{{ item }}'
-    extra_args: '--upgrade'
-  with_items:
-    - pip
-    - setuptools
+    name: virtualenv
+    executable: /usr/local/bin/pip
