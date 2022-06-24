@@ -10,6 +10,7 @@
     - emacs
     - vim
     - htop
+
     # CKAN requirements
     - python-dev-is-python2
     - postgresql
@@ -18,3 +19,9 @@
     - solr-jetty
     - openjdk-8-jdk
     - redis-server
+
+    # required for psycopg2
+    - gcc
+
+    # required for ansible acl tasks
+    - acl
