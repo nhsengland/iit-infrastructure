@@ -1,6 +1,12 @@
 ---
 # This playbook deploys/installs a complete CKAN isolated instance for
 # NHSEngland. Assumes a 64bit Ubuntu LTS as the target OS.
+- name: Install common packages
+  become: true
+  user: ubuntu
+  hosts: webservers
+  roles:
+    - common
 
 - name: Install Python 2 and modernise packaging tools
   gather_facts: false
@@ -9,18 +15,22 @@
   roles:
     - python
 
-- name: Install common packages
-  become: true
+- name: install and configure CKAN
   user: ubuntu
   hosts: webservers
   roles:
-    - common
+    - install_ckan
+
 
 - name: install and configure Postgres
   user: ubuntu
   hosts: dbservers
   roles:
     - database
+  vars:
+    # postgres requires psycopg2 which is installed as part of
+    # the CKAN installation
+    ansible_python_interpreter: /usr/lib/ckan/default/bin/python
 
 - name: install and configure SOLR
   user: ubuntu
