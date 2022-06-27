@@ -1,49 +1,80 @@
 ---
 # This role sets the tools used for search
-
-- name: install search tools
+# This uses the instructions to work around
+# running on jetty9 for ubuntu 20 from here
+# https://github.com/ckan/ckan/issues/4762
+# more succintly here
+# https://pastebin.com/ejAMVpx3
+- name: Create the directory for the jetty service
   become: true
-  apt:
-    pkg: "{{ item }}"
-    state: installed
-    update_cache: yes
-  with_items:
-    - openjdk-8-jdk
-    - redis-server
-    - solr-jetty
+  file:
+    state: directory
+    path: /etc/systemd/system/jetty9.service.d
 
-- name: update SOLR configuration - NO_START
+- name: Create the solr service file
   become: true
-  lineinfile:
-    dest: /etc/default/jetty8
-    regexp: ^NO_START
-    line: "NO_START=0"
+  template:
+    src: config/solr.conf
+    dest: /etc/systemd/system/jetty9.service.d/solr.conf
 
-- name: update SOLR configuration - JETTY_HOST
+- name: Update jetty host in start.ini
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
-    regexp: ^JETTY_HOST
-    line: "JETTY_HOST={{ solr_host }}"
+    dest: /etc/jetty9/start.ini
+    regexp: ^#jetty.host
+    line: jetty.host=127.0.0.1
 
-- name: update SOLR configuration - JETTY_PORT
+- name: Update jetty port in start.ini
   become: true
   lineinfile:
-    dest: /etc/default/jetty8
-    regexp: ^JETTY_PORT
-    line: "JETTY_PORT={{ solr_port }}"
+    dest: /etc/jetty9/start.ini
+    regexp: ^jetty.port
+    line: jetty.port=8983
 
-- name: update SOLR configuration - JAVA_HOME
-  become: true
-  lineinfile:
-    dest: /etc/default/jetty8
-    regexp: JAVA_HOME
-    line: "JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/"
-
-- name: copy solrconfig.xml
+- name: Update solr conf
   become: true
   template:
     src: config/solrconfig.xml
-    dest: /etc/solr/conf/solrconfig.xml
-    mode: 644
-    owner: root
+    dest: /etc/solr/solr-jetty.xml
+
+
+- name: Move the default solr schema file
+  become: true
+  copy:
+    remote_src: true
+    src: /etc/solr/conf/schema.xml
+    dest: /etc/solr/conf/schema.xml.bak
+
+- name: Delete the original default solr schema file
+  become: true
+  file:
+    path: /etc/solr/conf/schema.xml
+    state: absent
+
+- name: Symlink in the CKAN schema
+  become: true
+  file:
+     src:  /usr/lib/ckan/default/src/ckan/ckan/config/solr/schema.xml
+     dest: /etc/solr/conf/schema.xml
+     state: link
+
+- name: Reload daemon
+  become: true
+  systemd:
+    daemon_reload: yes
+
+- name: Restart Jetty
+  become: true
+  service:
+    name: jetty9
+    state: restarted
+
+# note we cannot use retries and delay on the uri task
+# because of the ansible version
+- name: Pause for a few seconds to let it work
+  pause:
+    seconds: 3
+
+- name: Check the appropriate url returns a 200
+  uri:
+    url: http://localhost:8983/solr/
