@@ -25,6 +25,8 @@
 - name: install and configure Postgres
   user: ubuntu
   hosts: dbservers
+  become: true
+  become_user: postgres
   roles:
     - database
   vars:
@@ -38,54 +40,67 @@
   roles:
     - search
 
-- name: install Apache and Nginx
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - webservers
+# - name: install plugins
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - plugins
 
-- name: install and configure CKAN
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - install_ckan
-    - plugins
-    - configure_ckan
+# - name: configure CKAN
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - configure_ckan
 
-- name: configure email
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - email
 
-- name: deploy data directory
-  user: ubuntu
-  hosts: webservers
-  roles:
-    - directory
+# - name: install Apache and Nginx
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - webservers
 
-- name: configure backup scripts
-  user: ubuntu
-  hosts: dbservers
-  roles:
-    - backup
+# - name: install and configure CKAN
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - install_ckan
+#     - plugins
+#     - configure_ckan
 
-- name: restart services
-  become: true
-  user: ubuntu
-  hosts: webservers
-  tasks:
-    - name: restart Jetty
-      service:
-        name: jetty8
-        state: restarted
+# - name: configure email
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - email
 
-    - name: restart Apache
-      service:
-        name: apache2
-        state: restarted
+# - name: deploy data directory
+#   user: ubuntu
+#   hosts: webservers
+#   roles:
+#     - directory
 
-    - name: restart Nginx
-      service:
-        name: nginx
-        state: restarted
+# - name: configure backup scripts
+#   user: ubuntu
+#   hosts: dbservers
+#   roles:
+#     - backup
+
+# - name: restart services
+#   become: true
+#   user: ubuntu
+#   hosts: webservers
+#   tasks:
+#     - name: restart Jetty
+#       service:
+#         name: jetty8
+#         state: restarted
+
+#     - name: restart Apache
+#       service:
+#         name: apache2
+#         state: restarted
+
+#     - name: restart Nginx
+#       service:
+#         name: nginx
+#         state: restarted

@@ -16,6 +16,14 @@
     state: directory
     mode: 0755
 
+- name: change owner of ckan directory
+  become: true
+  file:
+    path: /etc/ckan/
+    state: directory
+    owner: ubuntu
+    recurse: yes
+
 - name: create CKAN virtualenv
   become: true
   become_user: ubuntu
@@ -73,11 +81,12 @@
     dest: /etc/ckan/default/who.ini
     state: link
 
-- name: add production settings
-  become: true
-  template:
-    src: config/prod_settings.ini
-    dest: /etc/ckan/default/production.ini
+
+# - name: add production settings
+#   become: true
+#   template:
+#     src: config/prod_settings.ini
+#     dest: /etc/ckan/default/production.ini
 
 - name: Ensure FileStore directory exists
   become: true

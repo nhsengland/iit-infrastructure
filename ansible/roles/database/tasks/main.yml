@@ -2,8 +2,6 @@
 # This playbook installs and (re)configures Postgres
 
 - name: add ckan_default database user
-  become: true
-  become_user: postgres
   postgresql_user:
     name: "{{ db_user }}"
     password: "{{ db_password }}"
