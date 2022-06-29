@@ -5,22 +5,23 @@
   become: true
   apt:
       pkg: "{{ item }}"
-      state: installed
       update_cache: true
   with_items:
-    - ack-grep
-    - build-essential
     - emacs
-    - git
-    - htop
-    - iotop
-    - libmemcached-dev
-    - libpq5
-    - memcached
-    - python-dev
-    - python-virtualenv
-    - redis-server
-    - screen
-    - tree
     - vim
-    - zip
+    - htop
+
+    # CKAN requirements
+    - python-dev-is-python2
+    - postgresql
+    - libpq-dev
+    - git-core
+    - solr-jetty
+    - openjdk-8-jdk
+    - redis-server
+
+    # required for psycopg2
+    - gcc
+
+    # required for ansible acl tasks
+    - acl
