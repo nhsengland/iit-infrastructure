@@ -30,6 +30,10 @@
     pkg: "{{ item }}"
   with_items:
     - libssl-dev
+    - libxml2
+    - libxml2-dev
+    - libxslt1-dev
+    - libxslt1.1
     - swig
     - openssl
 
