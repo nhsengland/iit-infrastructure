@@ -1,5 +1,5 @@
 ---
-# This role installs a current python 2 and modern packaging tools
+# This role installs pip for python 2 and virtualenv
 - name: Remove system packaged pip
   become: true
   apt:
