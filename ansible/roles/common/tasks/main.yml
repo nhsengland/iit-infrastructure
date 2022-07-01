@@ -19,6 +19,11 @@
     - solr-jetty
     - openjdk-8-jdk
     - redis-server
+    - libpq5
+
+    # required by the cache
+    - libmemcached-dev
+    - memcached
 
     # required for psycopg2
     - gcc
