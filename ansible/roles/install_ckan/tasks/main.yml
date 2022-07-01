@@ -73,6 +73,14 @@
     dest: /etc/ckan/default/who.ini
     state: link
 
+# required by the cache
+- name: install pylibmc
+  become: true
+  become_user: ubuntu
+  pip:
+    name: pylibmc
+    virtualenv: /usr/lib/ckan/default
+
 - name: add production settings
   become: true
   template:
