@@ -11,6 +11,17 @@
     src: config/s3.ini
     dest: /home/ubuntu/.s3.ini
 
+- name: create Backup virtualenv directory
+  file:
+    path: /home/ubuntu/backup_env
+    state: directory
+
+- name: create Backup virtualenv
+  command: virtualenv --python /usr/bin/python2 --no-pip /home/ubuntu/backup_env
+
+- name: install pip in the virtualenv
+  command: /home/ubuntu/backup_env/bin/python /tmp/get-pip.py
+
 - name: backup requirements
   pip:
     name: requests

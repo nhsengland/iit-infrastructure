@@ -1,21 +1,6 @@
 ---
 # This playbook installs the bespoke plugins required for the site and ensures
 # CKAN's configuration is correct.
-
-- name: install packages for repos
-  become: true
-  apt:
-    pkg: "{{ item }}"
-    state: installed
-  with_items:
-    - libssl-dev
-    - libxml2
-    - libxml2-dev
-    - libxslt1-dev
-    - libxslt1.1
-    - openssl
-    - swig
-
 - name: clone ckanext-nhsengland git repository
   become: true
   become_user: ubuntu
@@ -23,10 +8,14 @@
     repo: "{{ git_protocol }}{{ git_repos_nhse }}"
     dest: /home/ubuntu/ckanext-nhsengland
 
-- name: run setup.py for nhsengland plugin
+- name: Install the ckanext-nhsengland
   become: true
   become_user: ubuntu
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-nhsengland
+  pip:
+    name: ckanext-nhsengland
+    virtualenv: /usr/lib/ckan/default
+    editable: true
+    chdir: /home/ubuntu
 
 - name: clone ckanext-adfs git repository
   become: true
@@ -35,10 +24,27 @@
     repo: "{{ git_protocol }}{{ git_repos_adfs }}"
     dest: /home/ubuntu/ckanext-adfs
 
-- name: run setup.py for adfs plugin
+- name: install packages for required by adfs
+  become: true
+  apt:
+    pkg: "{{ item }}"
+  with_items:
+    - libssl-dev
+    - libxml2
+    - libxml2-dev
+    - libxslt1-dev
+    - libxslt1.1
+    - swig
+    - openssl
+
+- name: Install the ckanext-adfs
   become: true
   become_user: ubuntu
-  command: /usr/lib/ckan/default/bin/python setup.py develop chdir=/home/ubuntu/ckanext-adfs
+  pip:
+    name: ckanext-adfs
+    virtualenv: /usr/lib/ckan/default
+    editable: true
+    chdir: /home/ubuntu
 
 - name: download the FederationMetadata.xml file
   get_url:

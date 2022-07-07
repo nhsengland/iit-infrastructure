@@ -1,22 +1,8 @@
 proxy_cache_path /tmp/nginx_cache levels=1:2 keys_zone=cache:30m max_size=250m;
 proxy_temp_path /tmp/nginx_proxy 1 2;
-
 server {
     listen 80 default;
     server_name {{ domain }};
-    rewrite ^ https://$server_name$request_uri? permanent;
-}
-
-server {
-    listen 443 ssl;
-    server_name {{ domain }};
-
-    ssl on;
-    ssl_certificate      /etc/letsencrypt/live/{{ domain }}/fullchain.pem;
-    ssl_certificate_key  /etc/letsencrypt/live/{{ domain }}/privkey.pem;
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-    ssl_session_cache    shared:SSL:10m;
 
     keepalive_timeout    60;
     client_max_body_size 100M;
@@ -25,6 +11,7 @@ server {
         proxy_pass http://127.0.0.1:8080/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header Host $host;
+
         proxy_cache cache;
         proxy_cache_bypass $cookie_auth_tkt;
         proxy_no_cache $cookie_auth_tkt;
@@ -33,17 +20,6 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
         # In emergency comment out line to force caching
         # proxy_ignore_headers X-Accel-Expires Expires Cache-Control;
-    }
-
-    location /ncdr/ {
-        access_log  /var/log/nginx/access.log;
-        rewrite /ncdr/(.*) /$1 break;
-        proxy_pass http://ec2-52-19-157-201.eu-west-1.compute.amazonaws.com;
-    }
-
-    location /phmi/ {
-        access_log  /var/log/nginx/access.log;
-        proxy_pass http://34.246.68.117;
     }
 
     location ~ /*datastore_search_sql {

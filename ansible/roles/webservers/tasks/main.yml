@@ -5,7 +5,6 @@
   become: true
   apt:
     pkg: "{{ item }}"
-    state: installed
   with_items:
     - apache2
     - libapache2-mod-rpaf
@@ -51,29 +50,6 @@
   become: true
   apt:
     name: nginx
-    state: installed
-
-- name: add Launchpad's key ID
-  become: true
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 14aa40ec0831756756d7f66c4f4ea0aae5267a6c
-
-- name: add certbot PPA
-  become: true
-  apt_repository:
-    repo: 'ppa:certbot/certbot'
-    update_cache: true
-
-- name: install certbot
-  become: true
-  apt:
-    pkg: python-certbot-nginx
-    state: installed
-
-- name: generate cert with Lets Encrypt
-  become: true
-  command: "certbot certonly --nginx -n -d {{ domain }} --agree-tos -m support@openhealthcare.org.uk"
 
 - name: copy nginx config
   become: true
